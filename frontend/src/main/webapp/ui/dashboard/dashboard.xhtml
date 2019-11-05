@@ -6,10 +6,10 @@
       xmlns:p="http://primefaces.org/ui">
     <style type="text/css">
         .img{
-            max-width: 150px;
-            max-height:150px;
-            min-width: 150px;
-            min-height:150px;
+            max-width: 123px;
+            max-height:123px;
+            min-width: 123px;
+            min-height:123px;
             box-sizing: border-box;
             border-radius: 15px;
             -moz-border-radius: 15px;
@@ -23,9 +23,9 @@
             opacity: .9;
 
 
-            height: 180px;
-            min-height: 180px;
-            max-height: 180px;
+            height: 150px;
+            min-height: 150px;
+            max-height: 150px;
 
             text-align: center;
 
@@ -39,48 +39,70 @@
             -moz-box-shadow: 0px 1px 15px 4px rgba(0, 0, 0, 0.45);
             box-shadow: 0px 1px 15px 4px rgba(0, 0, 0, 0.45);
         }
+        .ui-datalist-content{
+            border: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        .ui-panelgrid .ui-panelgrid-cell{
+            border: none;
+            margin: 0px;
+            padding: 0px;
+        }
+        .borderless{
+            border: none;
+
+        }
     </style>
 
     <h:form id="form">
-        <p:dataGrid var="appM" value="#{dashboardMB.dashUtils}" columns="8" layout="grid" rows="1">
-            <f:facet name="header">
-                Utils
-            </f:facet>
-            <p:outputPanel styleClass="app">
-                <p:link href="#{appM.link}" target="_blank">
-                    <h:panelGrid columns="1" style="padding: 0px;">
-                        <h:graphicImage value="#{appM.imglink}" styleClass="img" />
-                        <h:outputLabel value="#{appM.name}" />
-                    </h:panelGrid>
-                </p:link>
-            </p:outputPanel>
-        </p:dataGrid>
-        <p:dataGrid var="app" value="#{dashboardMB.dashApps}" columns="8" layout="grid" rows="1"  >
-            <f:facet name="header">
-                Apps
-            </f:facet>
-            <p:outputPanel styleClass="app">
-                <p:link href="#{app.link}" target="_blank">
-                    <h:panelGrid columns="1" style="padding: 0px;">
-                        <h:graphicImage value="#{app.imglink}" styleClass="img" />
-                        <h:outputLabel value="#{app.name}" />
-                    </h:panelGrid>
-                </p:link>
-            </p:outputPanel>
-        </p:dataGrid>
-        <p:dataGrid var="appt" value="#{dashboardMB.dashTv}" columns="8" layout="grid" rows="1">
-            <f:facet name="header">
-                TV
-            </f:facet>
-            <p:outputPanel styleClass="app">
-                <p:link href="#{appt.link}" target="_blank">
-                    <h:panelGrid columns="1" style="padding: 0px;">
-                        <h:graphicImage value="#{appt.imglink}" styleClass="img" />
-                        <h:outputLabel value="#{appt.name}" />
-                    </h:panelGrid>
-                </p:link>
-            </p:outputPanel>
-        </p:dataGrid>
+
+                <p:panelGrid columns="3" style="width: 100%; border: none;padding: 5px;" styleClass="borderless">
+                    <p:link href="https://95.117.44.178:89/" value="My Jupyter Lab" />
+                    <p:link href="ui/cvvisitors/cvvisitors.xhtml" value="CV Visitors" />
+                    <p:link href="welcome.xhtml" value="My Jupyter Lab" />
+                </p:panelGrid>
+
+                <p:dataGrid var="appM" value="#{dashboardMB.dashUtils}" columns="8" layout="grid" rows="1">
+                    <f:facet name="header">
+                        Utils
+                    </f:facet>
+                    <p:outputPanel styleClass="app">
+                        <p:link href="#{appM.link}" target="_blank">
+                            <h:panelGrid columns="1" style="padding: 0px;">
+                                <h:graphicImage value="#{appM.imglink}" styleClass="img" />
+                                <h:outputLabel value="#{appM.name}" />
+                            </h:panelGrid>
+                        </p:link>
+                    </p:outputPanel>
+                </p:dataGrid>
+                <p:dataGrid var="app" value="#{dashboardMB.dashApps}" columns="8" layout="grid" rows="1"  >
+                    <f:facet name="header">
+                        Apps
+                    </f:facet>
+                    <p:outputPanel styleClass="app">
+                        <p:link href="#{app.link}" target="_blank">
+                            <h:panelGrid columns="1" style="padding: 0px;">
+                                <h:graphicImage value="#{app.imglink}" styleClass="img" />
+                                <h:outputLabel value="#{app.name}" />
+                            </h:panelGrid>
+                        </p:link>
+                    </p:outputPanel>
+                </p:dataGrid>
+                <p:dataGrid var="appt" value="#{dashboardMB.dashTv}" columns="8" layout="grid" rows="1">
+                    <f:facet name="header">
+                        TV
+                    </f:facet>
+                    <p:outputPanel styleClass="app">
+                        <p:link href="#{appt.link}" target="_blank">
+                            <h:panelGrid columns="1" style="padding: 0px;">
+                                <h:graphicImage value="#{appt.imglink}" styleClass="img" />
+                                <h:outputLabel value="#{appt.name}" />
+                            </h:panelGrid>
+                        </p:link>
+                    </p:outputPanel>
+                </p:dataGrid>
+
     </h:form>
 </ui:composition>
 
