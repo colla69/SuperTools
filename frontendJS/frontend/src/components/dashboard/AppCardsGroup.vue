@@ -32,17 +32,18 @@
         },
         props: {
             "title": String,
-            "tv":[],
-            "utils":[],
-            "links":[],
+            "tv": [],
+            "utils": [],
+            "links": [],
+
         },
         mounted(){
             axios.get('/dashApps')
                 .then(response => {
-                    let apps = response.data
-                    this.tv = apps["dashTv"]
-                    this.links = apps["dashApps"]
-                    this.utils = apps["dashUtils"]
+                    let apps = response.data;
+                    this.tv = apps["dashTv"];
+                    this.links = apps["dashApps"];
+                    this.utils = apps["dashUtils"];
                 })
         }
     }

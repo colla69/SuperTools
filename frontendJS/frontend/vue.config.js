@@ -5,9 +5,12 @@ module.exports = {
     proxy: {
       "/dashApps": {
         target: 'https://192.168.1.247:8443',
-
         changeOrigin: true
-      }
+      },
+      "/visitors": {
+        target: 'https://cv.colarietitosti.info',
+        changeOrigin: true
+      },
     }
   }
 };

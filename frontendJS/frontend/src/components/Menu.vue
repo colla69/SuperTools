@@ -7,7 +7,7 @@
         </router-link>
         <router-link to="/visitors">
             <v-btn id="menuBtn" >
-                vis
+                CV Guests
             </v-btn>
         </router-link>
     </v-toolbar>
