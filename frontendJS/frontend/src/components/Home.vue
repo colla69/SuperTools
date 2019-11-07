@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <h3> title </h3>
-        <AppCardsGroup title="test">
+    <div class="body">
+
+        <AppCardsGroup title="Dashboard">
         </AppCardsGroup>
     </div>
 </template>
@@ -12,7 +12,7 @@
     export default {
         name: 'home',
         components: {
-            AppCardsGroup
+            AppCardsGroup,
         }
     }
 </script>
