@@ -3,7 +3,8 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui">#
+
     <style type="text/css">
         .img{
             max-width: 123px;
@@ -21,20 +22,15 @@
             margin: 7px;
             background-color: lightblue;
             opacity: .9;
-
-
             height: 150px;
             min-height: 150px;
             max-height: 150px;
-
             text-align: center;
-
             box-sizing: border-box;
             border-radius: 15px;
             -moz-border-radius: 15px;
             -webkit-border-radius: 15px;
             border: 1px none  #000000;
-
             -webkit-box-shadow: 0px 1px 15px 4px rgba(0, 0, 0, 0.45);
             -moz-box-shadow: 0px 1px 15px 4px rgba(0, 0, 0, 0.45);
             box-shadow: 0px 1px 15px 4px rgba(0, 0, 0, 0.45);
@@ -47,7 +43,7 @@
         .ui-panelgrid .ui-panelgrid-cell{
             border: none;
             margin: 0px;
-            padding: 0px;
+            padding: 5px;
         }
         .borderless{
             border: none;
@@ -56,7 +52,6 @@
     </style>
 
     <h:form id="form">
-
                 <p:panelGrid columns="3" style="width: 100%; border: none;padding: 5px;" styleClass="borderless">
                     <p:link href="https://95.117.44.178:89/" value="My Jupyter Lab" />
                     <p:link href="ui/cvvisitors/cvvisitors.xhtml" value="CV Visitors" />
@@ -64,7 +59,7 @@
                 </p:panelGrid>
 
                 <p:dataGrid var="appM" value="#{dashboardMB.dashUtils}" columns="8" layout="grid" rows="1">
-                    <f:facet name="header">
+                    <f:facet name="header" >
                         Utils
                     </f:facet>
                     <p:outputPanel styleClass="app">

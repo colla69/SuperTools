@@ -9,52 +9,31 @@
     <title>CVVisitors</title>
 </h:head>
 <style type="text/css">
-    .wide {
-        width: 100%;
-    }
-    .borderless{
-        border: none;
-    }
-    .ui-panel-content, .ui-widget-content {
-        #border:none;
-        padding: 0px;
-        margin: 0px;
-    }
-    .ui-panelgrid .ui-panelgrid-cell{
-        border: none;
-        #margin: 0px;
-        #padding: 0px;
-    }
-    .ui-datalist-content{
-        border: none;
-        margin: 0px;
-        padding: 0px;
-    }
+  
 </style>
-<h:body styleClass="mybody" >
-    <h:form>
-        <p:panel styleClass="wide borderless">
-            <p:button type="button" href="../../welcome.xhtml" value="Go Back" />
-        </p:panel>
-
-            <p:dataGrid var="v" value="#{cvVisitorsMB.visitors}" columns="1" layout="tabular" >
-                <f:facet name="header">
-                    This IPs visited https://cv.colarietitosti.info
-                </f:facet>
-                <p:panel value="#{v.ip_addr}" styleClass="wide borderless">
-                <p:panelGrid columns="3" styleClass="wide borderless">
+<h:body styleClass="mybody">
+    <h:form styleClass="mybody">
+        <p:panelGrid columns="1" styleClass="wide borderless">
+            <p:button href="../../welcome.xhtml" value="Go Back" />
+        </p:panelGrid>
+        <p:dataGrid var="v" value="#{cvVisitorsMB.visitors}" columns="1" layout="tabular"  styleClass="mybody borderless">
+            <f:facet name="header">
+                This IPs visited https://cv.colarietitosti.info
+            </f:facet>
+            <p:panel styleClass="blockstyle">
+                <p:panelGrid columns="3" styleClass="borderless wide" >
                     <p:outputLabel style="align-items: center;" value="#{v.ip_addr}" />
                     <p:outputLabel value="#{v.timestamp}" />
                     <p:outputLabel value="Locale: #{v.locale}" />
                 </p:panelGrid>
-                <p:panelGrid columns="4" style="width: 100%; border: none;padding: 10px; " styleClass="borderless">
+                <p:panelGrid columns="4" style="border-top: none;" styleClass="borderless wide">
                     <p:link href="https://viewdns.info/iplocation/?ip=#{v.ip_addr}" value="Locate" target="_blank"/>
                     <p:link href="https://viewdns.info/whois/?domain=#{v.ip_addr}" value="Who Is" target="_blank" />
                     <p:link href="https://viewdns.info/reversedns/?ip=#{v.ip_addr}" value="Reverse DNS" target="_blank" />
                     <p:link href="https://viewdns.info/portscan/?host=#{v.ip_addr}" value="Port Scan" target="_blank" />
                 </p:panelGrid>
-                </p:panel>
-            </p:dataGrid>
+            </p:panel>
+        </p:dataGrid>
     </h:form>
 </h:body>
 </html>

@@ -10,17 +10,22 @@
 </h:head>
 <style type="text/css">
     .mybody {
-        background-image: url("#{resource['images/pandas.jpeg']}");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-attachment:fixed;
         margin: 0px;
         width: 100%;
         height: 100%;
+        background-color: lightblue!important;
+    }
+    .ui-datagrid-header, ui-widget-header{
+        background-color: deepskyblue!important;
+        #border-color: darkblue!important;
+    }
+    .body,.ui-widget-content {
+        background-color: aliceblue!important;
+        border-color: lightblue!important;
     }
 </style>
 <h:body styleClass="mybody" >
-    <p:tabView style="height: 100%">
+    <p:tabView style="height: 100%" styleClass="mybody">
         <p:tab title="Dashboard">
             <ui:include src="ui/dashboard/dashboard.xhtml"/>
         </p:tab>
