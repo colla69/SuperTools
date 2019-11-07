@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class DashAppsRest {
@@ -17,7 +18,16 @@ public class DashAppsRest {
 
     @RequestMapping(method = RequestMethod.GET, value="/dashApps")
     @ResponseBody
-    public List<DashApp> getAllApps() {
-        return dashAppsRepository.findAll();
+    public DashAppsDO getAllApps() {
+
+        DashAppsDO dashAppsDO = new DashAppsDO();
+
+        List<DashApp> apps = dashAppsRepository.findAll();
+        dashAppsDO.setDashApps(apps.stream().filter(a -> a.getType().equals("app")).sorted().collect(Collectors.toList()));
+        dashAppsDO.setDashUtils(apps.stream().filter(a -> a.getType().equals("util")).sorted().collect(Collectors.toList()));
+        dashAppsDO.setDashTv(apps.stream().filter(a -> a.getType().equals("tv")).sorted().collect(Collectors.toList()));
+
+        return dashAppsDO;
     }
+
 }
