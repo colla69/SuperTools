@@ -1,0 +1,15 @@
+[Unit]
+Description=dyndns
+
+[Service]
+Type=simple
+PIDFile=/run/dyndns.pid
+ExecStart=java -jar /opt/supertools/dyndns/release/dyndns-0.0.1-SNAPSHOT.jar
+User=root
+Group=root
+WorkingDirectory=/opt/supertools/dyndns/release
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

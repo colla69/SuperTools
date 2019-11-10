@@ -44,12 +44,12 @@ public class IpLogRest {
                 System.out.println("saving new ip: "+ip);
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
-                //System.out.println(  String.format(nginxConf,ip) );
+                System.out.println(  String.format(nginxConf,ip) );
                 System.out.println("reconfiguring nginx... ");
                 this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
                 this.execShellCmd(
                         String.format("echo %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",
-                                nginxConf,ip)
+                                nginxConf,ip,ip)
                 );
                 this.execShellCmd("nginx -s reload");
                 System.out.println("done! ");
@@ -84,7 +84,15 @@ public class IpLogRest {
             "        ssl_certificate /etc/letsencrypt/live/dash.colarietitosti.info/fullchain.pem; # managed by Certbot\n" +
             "        ssl_certificate_key /etc/letsencrypt/live/dash.colarietitosti.info/privkey.pem; # managed by Certbot\n" +
             "\n" +
-            "        location / {\n" +
+            "        location /backend {\n" +
+            "                proxy_set_header X-Real-IP  $remote_addr;\n" +
+            "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
+            "                proxy_set_header Host $host;\n" +
+            "                proxy_pass  https://%s:8443;\n" +
+            "                proxy_redirect off;\n" +
+            "        }\n" +
+            "\n" +
+            "        location /jupyter {\n" +
             "                proxy_set_header X-Real-IP  $remote_addr;\n" +
             "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
             "                proxy_set_header Host $host;\n" +

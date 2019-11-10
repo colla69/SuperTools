@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ln -s dyndns.service /etc/systemd/system/dyndns.service
