@@ -47,9 +47,10 @@ public class IpLogRest {
                 String newNginxConf = String.format(nginxConf,ip,ip);
                 System.out.println( newNginxConf );
                 System.out.println("reconfiguring nginx... ");
-                this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
-                this.execShellCmd( String.format(
-                        "echos %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",newNginxConf));
+                //this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
+                String reconfCmd = String.format(
+                        "echo %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",newNginxConf);
+                this.execShellCmd( reconfCmd );
                 this.execShellCmd("nginx -s reload");
                 System.out.println("done! ");
             }
