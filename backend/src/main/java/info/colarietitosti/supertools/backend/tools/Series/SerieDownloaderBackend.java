@@ -150,10 +150,11 @@ public class SerieDownloaderBackend {
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
             log.info("\tadding to Download Queue: ".concat(dlink));
+            String donePath = config.getOutPath().concat("done/").concat(episode.getName());
             String savePath = config.getOutPath()
                     .concat(episode.getSerie().getName()).concat("/s")
                     .concat(episode.getSerie().getNo().toString()).concat("/");
-            downloadQueue.put(new FileDownloader(dlink, savePath, episode.getName()));
+            downloadQueue.put(new FileDownloader(dlink, savePath, episode.getName(),"touch \"".concat(donePath).concat("\"")));
             return true;
         }
         return false;
@@ -163,5 +164,4 @@ public class SerieDownloaderBackend {
         watchLinks = watchLinks.parallelStream().filter(link -> link.contains(s)).collect(Collectors.toList());
         return watchLinks;
     }
-
 }

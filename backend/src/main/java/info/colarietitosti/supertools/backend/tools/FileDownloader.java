@@ -18,11 +18,13 @@ public class FileDownloader implements Runnable {
     private String title;
     private boolean running;
     private boolean done;
+    private String doneCmd = "";
 
-    public FileDownloader(String link, String savePath, String title) {
+    public FileDownloader(String link, String savePath, String title, String doneCmd) {
         this.link = link;
         this.savePath = savePath;
         this.title = title;
+        this.doneCmd = doneCmd;
     }
 
     public void download(String link, String savePath, String title){
@@ -36,6 +38,10 @@ public class FileDownloader implements Runnable {
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
+            if (!this.doneCmd.equals("")) {
+                this.execShellCmd(this.doneCmd);
+                log.info("done!".concat(this.doneCmd));
             }
             this.running = false;
             this.done = true;
@@ -58,5 +64,15 @@ public class FileDownloader implements Runnable {
     }
     public boolean isDone() {
         return done;
+    }
+
+    private void execShellCmd(String cmd) {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", cmd);
+        try {
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

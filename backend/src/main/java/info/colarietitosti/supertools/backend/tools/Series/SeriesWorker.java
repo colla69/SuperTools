@@ -23,17 +23,15 @@ public class SeriesWorker {
     DownloadQueue downloadQueue;
 
     public void updateSeries(){
-        downloadQueue.put(new FileDownloader("https://cv.colarietitosti.info/files/CV_Docs.zip#editwhatever", "~/", "test"));
-
         List<Serie> series = seriesSearch.searchSeriesForDownload();
         series.forEach(s ->{
             s.getEpis().forEach(e -> {
                 log.info("Starting Episode Search for: ".concat(e.getName()));
                 List<String> links = seriesSearch.getLinksFromEpiPage(e);
                 Boolean res =
+                        serieDownloaderBackend.downloadFromVidotodo(links, e) ||
                         serieDownloaderBackend.downloadFromVshare(links, e) ||
-                        serieDownloaderBackend.downloadFromVidoza(links, e) ||
-                        serieDownloaderBackend.downloadFromVidotodo(links, e);
+                        serieDownloaderBackend.downloadFromVidoza(links, e) ;
                 /*
                 Future<Boolean> futureVidoza = serieDownloaderBackend.asyncDownloadFromVidoza(links);
                 Future<Boolean> futureVshare = serieDownloaderBackend.asyncDownloadFromVshare(links);

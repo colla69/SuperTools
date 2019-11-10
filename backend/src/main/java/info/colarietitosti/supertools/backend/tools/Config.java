@@ -30,6 +30,9 @@ public class Config {
         addSeries("Mr Robot", "mr_robot", 4);
         addSeries("The Simpsons", "the_simpsons", 30,31);
         addSeries("The Blacklist", "The_Blacklist", 7);
+        addSeries("Timeless (2016)", "timeless-2", 2);
+        addSeries("Rick and Morty", "rick_and_morty", 4);
+        addSeries("Shameless USA", "Shameless_USA", 10);
     }
 
     private void addSeries(String name, String linkpart, Integer ... num ){

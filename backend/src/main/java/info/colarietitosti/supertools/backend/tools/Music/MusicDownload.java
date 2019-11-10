@@ -41,7 +41,7 @@ public class MusicDownload {
                     String pathSeparator = "/";
                     String downPath = "downloads/".concat(artist.getName()).concat(pathSeparator).concat(album.getName())
                             .concat(separator).concat(album.getYear()).concat(separator).concat(album.getGenre()).concat(pathSeparator);
-                    downloadQueue.put(new FileDownloader(link, downPath, track.getNo()+" "+track.getName().concat(".mp3")));
+                    downloadQueue.put(new FileDownloader(link, downPath, track.getNo()+" "+track.getName().concat(".mp3"),""));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

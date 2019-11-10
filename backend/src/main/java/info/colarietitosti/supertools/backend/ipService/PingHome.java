@@ -1,9 +1,36 @@
 package info.colarietitosti.supertools.backend.ipService;
 
-import org.springframework.stereotype.Controller;
+import lombok.extern.java.Log;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-@Controller
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+
+@Log
+@Component
 public class PingHome {
+
+    @Scheduled(fixedDelay = 600000)
+    public void pingServer(){
+        log.info("pinging server.. ");
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost("https://admin.colarietitosti.info/ips/myNewIP");
+        try {
+            StringEntity httpbody = new StringEntity("penis=lang");
+            httppost.setEntity(httpbody);
+            HttpResponse response = httpclient.execute(httppost);
+            log.info("success! ".concat(response.toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
