@@ -40,7 +40,9 @@ public class IpLogRest {
                 newip.setIp(ip);
                 newip.setTime(new Date(System.currentTimeMillis()));
                 ipLogRepository.save(newip);
-                System.out.println("saving new ip: "+request.getRemoteAddr());
+                String ip = request.getHeader("X-Real-IP");
+                System.out.println("saving new ip: "+request.getRemoteHost());
+                System.out.println("saving new ip: "+ip);
             }
         }
         return String.valueOf(200);
