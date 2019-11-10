@@ -35,10 +35,10 @@ public class IpLogRest {
             String ip = request.getRemoteAddr();
             List<String> knownIps = ipLogRepository.findAll()
                     .stream().map(IpLog::getIp).collect(Collectors.toList());
-            String ip = request.getHeader("X-Real-IP");
+
             System.out.println("saving new ip: "+request.getRemoteHost());
-            System.out.println("saving new ip: "+ip);
-            
+            System.out.println("saving ip from header : "+request.getHeader("X-Real-IP"););
+
             if (!knownIps.contains(ip)) {
                 IpLog newip = new IpLog();
                 newip.setIp(ip);
