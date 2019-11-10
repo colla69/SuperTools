@@ -48,7 +48,7 @@ public class IpLogRest {
 
             System.out.println(  String.format(nginxConf,ip) );
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("touch /root/test.txt");
+            processBuilder.command("bash", "-c", "touch /root/test.txt");
             try {
                 processBuilder.start();
             } catch (IOException e) {
