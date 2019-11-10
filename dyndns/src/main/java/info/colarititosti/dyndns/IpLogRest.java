@@ -52,7 +52,7 @@ public class IpLogRest {
                     String.format("echo %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",
                             nginxConf,ip)
             );
-
+            this.execShellCmd("nginx -s reload");
         }
         return String.valueOf(200);
     }
