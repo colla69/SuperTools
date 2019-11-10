@@ -86,17 +86,17 @@ public class IpLogRest {
             "        ssl_certificate_key /etc/letsencrypt/live/dash.colarietitosti.info/privkey.pem; # managed by Certbot\n" +
             "\n" +
             "        location /backend {\n" +
-            "                proxy_set_header X-Real-IP  $remote_addr;\n" +
-            "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
-            "                proxy_set_header Host $host;\n" +
+            "                proxy_set_header X-Real-IP  \\$remote_addr;\n" +
+            "                proxy_set_header X-Forwarded-For \\$remote_addr;\n" +
+            "                proxy_set_header Host \\$host;\n" +
             "                proxy_pass  https://%s:8443;\n" +
             "                proxy_redirect off;\n" +
             "        }\n" +
             "\n" +
             "        location /jupyter {\n" +
-            "                proxy_set_header X-Real-IP  $remote_addr;\n" +
-            "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
-            "                proxy_set_header Host $host;\n" +
+            "                proxy_set_header X-Real-IP  \\$remote_addr;\n" +
+            "                proxy_set_header X-Forwarded-For \\$remote_addr;\n" +
+            "                proxy_set_header Host \\$host;\n" +
             "                proxy_pass  https://%s:89;\n" +
             "                proxy_redirect off;\n" +
             "        }\n" +
@@ -104,8 +104,8 @@ public class IpLogRest {
             "}\n" +
             "\n" +
             "server {\n" +
-            "    if ($host = dash.colarietitosti.info) {\n" +
-            "        return 301 https://$host$request_uri;\n" +
+            "    if (\\$host = dash.colarietitosti.info) {\n" +
+            "        return 301 https://\\$host\\$request_uri;\n" +
             "    } # managed by Certbot\n" +
             "\n" +
             "\n" +
@@ -114,7 +114,7 @@ public class IpLogRest {
             "  server_name dash.colarietitosti.info;\n" +
             "\n" +
             "\n" +
-            "  return 301 https://dash.colarietitosti.info$request_uri;\n" +
+            "  return 301 https://dash.colarietitosti.info\\$request_uri;\n" +
             "\n" +
             "\n" +
             "\n" +
