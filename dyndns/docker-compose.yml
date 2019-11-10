@@ -2,10 +2,9 @@ version: '2.3'
 
 services:
   web:
-    build: .
+    build: /srv/
     command: java -jar -Xmx300m /srv/dyndns-0.0.1-SNAPSHOT.jar
     ports:
       - "9999:9999"
     restart: always
     mem_limit: 350m
-K
