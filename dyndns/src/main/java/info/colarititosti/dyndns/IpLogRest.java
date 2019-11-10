@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,7 +24,7 @@ public class IpLogRest {
     }
 
     @RequestMapping(value = "/myNewIP", method = RequestMethod.POST)
-    public String addTrustedIp(@RequestBody String newIP, HttpServletRequest request){
+    public String addTrustedIp(@RequestBody String newIP, HttpServletRequest request) {
         String realIP = "";
         String loc = "";
         String referer = "";
@@ -48,6 +49,11 @@ public class IpLogRest {
             System.out.println(  String.format(nginxConf,ip) );
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.command("touch /root/test.txt");
+            try {
+                processBuilder.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
         return String.valueOf(200);
