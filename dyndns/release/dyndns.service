@@ -8,6 +8,8 @@ ExecStart=/usr/bin/java -jar /opt/supertools/dyndns/release/dyndns-0.0.1-SNAPSHO
 User=root
 Group=root
 WorkingDirectory=/opt/supertools/dyndns/release
+StandardOutput=/var/log/dyndns.log
+StandardError=/var/log/dyndns_err.log
 Restart=always
 RestartSec=10
 
