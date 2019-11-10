@@ -16,6 +16,8 @@ public class IpLogRest {
     @Autowired
     IpLogRepository ipLogRepository;
 
+    String lastIP = ""
+
     @RequestMapping(method = RequestMethod.GET, value="/IpLog")
     @ResponseBody
     public List<IpLog> getAllApps(){
@@ -41,9 +43,55 @@ public class IpLogRest {
                 newip.setTime(new Date(System.currentTimeMillis()));
                 ipLogRepository.save(newip);
                 System.out.println("saving new ip: "+ip);
+                ProcessBuilder processBuilder = new ProcessBuilder();
+
             }
+
+            System.out.println(  String.format(nginxConf,ip) );
         }
         return String.valueOf(200);
     }
 
+
+
+    private  String nginxConf =
+    "server {\n" +
+            "        listen 443;\n" +
+            "        server_name dash.colarietitosti.info;\n" +
+            "\n" +
+            "        ssl_session_timeout 5m;\n" +
+            "        ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;\n" +
+            "        ssl_session_cache shared:SSL:50m;\n" +
+            "        ssl_dhparam /etc/letsencrypt/certs/dhparam.pem;\n" +
+            "        ssl_prefer_server_ciphers on;\n" +
+            "\n" +
+            "        ssl_certificate /etc/letsencrypt/live/dash.colarietitosti.info/fullchain.pem; # managed by Certbot\n" +
+            "        ssl_certificate_key /etc/letsencrypt/live/dash.colarietitosti.info/privkey.pem; # managed by Certbot\n" +
+            "\n" +
+            "        location / {\n" +
+            "                proxy_set_header X-Real-IP  $remote_addr;\n" +
+            "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
+            "                proxy_set_header Host $host;\n" +
+            "                proxy_pass  https://$s:89;\n" +
+            "                proxy_redirect off;\n" +
+            "        }\n" +
+            "\n" +
+            "}\n" +
+            "\n" +
+            "server {\n" +
+            "    if ($host = dash.colarietitosti.info) {\n" +
+            "        return 301 https://$host$request_uri;\n" +
+            "    } # managed by Certbot\n" +
+            "\n" +
+            "\n" +
+            "  listen 80;\n" +
+            "#  listen 443;\n" +
+            "  server_name dash.colarietitosti.info;\n" +
+            "\n" +
+            "\n" +
+            "  return 301 https://dash.colarietitosti.info$request_uri;\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "}\n";
 }
