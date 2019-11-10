@@ -37,7 +37,8 @@ public class IpLogRest {
                     .stream().map(IpLog::getIp).collect(Collectors.toList());
 
             System.out.println("saving new ip: "+request.getRemoteHost());
-            System.out.println("saving ip from header : "+request.getHeader("X-Real-IP"););
+            System.out.println(request.getHeaderNames());
+            System.out.println("saving ip from header : "+request.getHeader("X-Real-IP"));
 
             if (!knownIps.contains(ip)) {
                 IpLog newip = new IpLog();
