@@ -4,7 +4,7 @@ Description=dyndns
 [Service]
 Type=simple
 PIDFile=/run/dyndns.pid
-ExecStart=java -jar /opt/supertools/dyndns/release/dyndns-0.0.1-SNAPSHOT.jar
+ExecStart=/usr/bin/java -jar /opt/supertools/dyndns/release/dyndns-0.0.1-SNAPSHOT.jar
 User=root
 Group=root
 WorkingDirectory=/opt/supertools/dyndns/release
