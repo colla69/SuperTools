@@ -16,8 +16,6 @@ public class IpLogRest {
     @Autowired
     IpLogRepository ipLogRepository;
 
-    String lastIP = ""
-
     @RequestMapping(method = RequestMethod.GET, value="/IpLog")
     @ResponseBody
     public List<IpLog> getAllApps(){
