@@ -46,6 +46,9 @@ public class IpLogRest {
             }
 
             System.out.println(  String.format(nginxConf,ip) );
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            processBuilder.command("touch /root/test.txt");
+
         }
         return String.valueOf(200);
     }
@@ -70,7 +73,7 @@ public class IpLogRest {
             "                proxy_set_header X-Real-IP  $remote_addr;\n" +
             "                proxy_set_header X-Forwarded-For $remote_addr;\n" +
             "                proxy_set_header Host $host;\n" +
-            "                proxy_pass  https://$s:89;\n" +
+            "                proxy_pass  https://%s:89;\n" +
             "                proxy_redirect off;\n" +
             "        }\n" +
             "\n" +
