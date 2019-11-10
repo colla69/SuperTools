@@ -35,14 +35,15 @@ public class IpLogRest {
             String ip = request.getRemoteAddr();
             List<String> knownIps = ipLogRepository.findAll()
                     .stream().map(IpLog::getIp).collect(Collectors.toList());
+            String ip = request.getHeader("X-Real-IP");
+            System.out.println("saving new ip: "+request.getRemoteHost());
+            System.out.println("saving new ip: "+ip);
+            
             if (!knownIps.contains(ip)) {
                 IpLog newip = new IpLog();
                 newip.setIp(ip);
                 newip.setTime(new Date(System.currentTimeMillis()));
                 ipLogRepository.save(newip);
-                String ip = request.getHeader("X-Real-IP");
-                System.out.println("saving new ip: "+request.getRemoteHost());
-                System.out.println("saving new ip: "+ip);
             }
         }
         return String.valueOf(200);
