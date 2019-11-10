@@ -44,7 +44,7 @@ public class IpLogRest {
                 System.out.println("saving new ip: "+ip);
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
-                System.out.println(  String.format(nginxConf,ip) );
+                System.out.println(  String.format(nginxConf,ip,ip) );
                 System.out.println("reconfiguring nginx... ");
                 this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
                 this.execShellCmd(

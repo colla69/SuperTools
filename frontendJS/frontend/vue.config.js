@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     proxy: {
       "/dashApps": {
-        target: 'https://192.168.1.247:8443',
+        target: 'https://dash.colarietitosti.info/backend',
         changeOrigin: true
       },
       "/visitors": {
