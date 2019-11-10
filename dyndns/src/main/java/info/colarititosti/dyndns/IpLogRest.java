@@ -44,13 +44,12 @@ public class IpLogRest {
                 System.out.println("saving new ip: "+ip);
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
-                System.out.println(  String.format(nginxConf,ip,ip) );
+                String newNginxConf = String.format(nginxConf,ip,ip);
+                System.out.println( newNginxConf );
                 System.out.println("reconfiguring nginx... ");
                 this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
-                this.execShellCmd(
-                        String.format("echo %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",
-                                nginxConf,ip,ip)
-                );
+                this.execShellCmd( String.format(
+                        "echos %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",newNginxConf));
                 this.execShellCmd("nginx -s reload");
                 System.out.println("done! ");
             }
