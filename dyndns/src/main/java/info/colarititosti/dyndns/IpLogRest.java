@@ -47,16 +47,24 @@ public class IpLogRest {
             }
 
             System.out.println(  String.format(nginxConf,ip) );
-            ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("bash", "-c", "touch /root/test.txt");
-            try {
-                processBuilder.start();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
+            this.execShellCmd(
+                    String.format("echo %s > /etc/nginx/conf.d/dash.colarietitosti.info.conf",
+                            nginxConf,ip)
+            );
 
         }
         return String.valueOf(200);
+    }
+
+    private void execShellCmd(String cmd){
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.command("bash", "-c", cmd);
+        try {
+            processBuilder.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
