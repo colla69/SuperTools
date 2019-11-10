@@ -27,24 +27,20 @@ public class IpLogRest {
         String realIP = "";
         String loc = "";
         String referer = "";
-
         System.out.println("PingHome");
         List<String> mess = Arrays.asList(newIP.split("="));
         if (!mess.isEmpty()){
             String pass = mess.get(0);
-            String ip = request.getRemoteAddr();
+            String ip = request.getHeader("X-Real-IP");
             List<String> knownIps = ipLogRepository.findAll()
                     .stream().map(IpLog::getIp).collect(Collectors.toList());
-
-            System.out.println(request.getHeaderNames().toString());
-            System.out.println("saving ip from header : "+request.getHeader("X-Real-IP"));
-            System.out.println("saving new ip: "+request.getRemoteHost());
 
             if (!knownIps.contains(ip)) {
                 IpLog newip = new IpLog();
                 newip.setIp(ip);
                 newip.setTime(new Date(System.currentTimeMillis()));
                 ipLogRepository.save(newip);
+                System.out.println("saving new ip: "+ip);
             }
         }
         return String.valueOf(200);
