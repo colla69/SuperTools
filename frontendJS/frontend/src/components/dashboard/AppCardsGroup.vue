@@ -16,7 +16,6 @@
         <div class="line">
             <AppCard :name="card.name" :link="card.link" :imglink="card.imglink" v-bind:key="card.id" v-for="card in tv">
             </AppCard>
-
         </div>
     </v-card>
 </template>
@@ -35,10 +34,9 @@
             "tv": [],
             "utils": [],
             "links": [],
-
         },
         mounted(){
-            axios.get('/dashApps')
+            axios.get('/backend/dashApps')
                 .then(response => {
                     let apps = response.data;
                     this.tv = apps["dashTv"];

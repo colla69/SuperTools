@@ -10,6 +10,11 @@
                 CV Guests
             </v-btn>
         </router-link>
+        <router-link to="/downloader">
+            <v-btn id="menuBtn" >
+                Downloader
+            </v-btn>
+        </router-link>
     </v-toolbar>
 </template>
 
