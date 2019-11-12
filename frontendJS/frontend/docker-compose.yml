@@ -1,8 +1,8 @@
 version: '2.3'
 
 services:
-  web:
-    build: ./
+  frontend:
+    build: ..
     ports:
       - "8080:9998"
     restart: always
