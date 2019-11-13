@@ -17,5 +17,5 @@ public interface DashAppsClient extends GenericClient {
 
     //@RequestMapping(method = RequestMethod.GET, value = "/dashApps")
     @RequestLine("GET /dashApps")
-    List<DashApp> getDashApps();
+    DashAppsDO getDashApps();
 }

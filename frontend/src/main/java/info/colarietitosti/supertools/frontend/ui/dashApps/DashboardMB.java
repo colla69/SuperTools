@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Scope("prototype")
 public class DashboardMB extends SuperGenericBean {
 
-
     private DashAppsClient dashAppsClient;
     private List<DashApp> dashTv;
     private List<DashApp> dashApps;
@@ -36,10 +35,10 @@ public class DashboardMB extends SuperGenericBean {
     public void init(){
         dashAppsClient = (DashAppsClient) makeDataSource(DashAppsClient.class);
 
-        List<DashApp> apps =dashAppsClient.getDashApps();
-        this.dashApps = apps.stream().filter(a -> a.getType().equals("app")).sorted().collect(Collectors.toList());
-        this.dashUtils = apps.stream().filter(a -> a.getType().equals("util")).sorted().collect(Collectors.toList());
-        this.dashTv = apps.stream().filter(a -> a.getType().equals("tv")).sorted().collect(Collectors.toList());
+        DashAppsDO apps = dashAppsClient.getDashApps();
+        this.dashApps = apps.getDashApps();
+        this.dashUtils = apps.getDashUtils();
+        this.dashTv = apps.getDashTv();
     }
 
 
