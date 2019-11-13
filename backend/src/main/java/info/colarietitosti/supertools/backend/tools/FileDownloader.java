@@ -40,7 +40,7 @@ public class FileDownloader implements Runnable {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
             if (!this.doneCmd.equals("")) {
-                this.execShellCmd(this.doneCmd);
+                ShellExecuter.execShellCmd(this.doneCmd);
                 log.info("done!".concat(this.doneCmd));
             }
             this.running = false;
@@ -64,15 +64,5 @@ public class FileDownloader implements Runnable {
     }
     public boolean isDone() {
         return done;
-    }
-
-    private void execShellCmd(String cmd) {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("bash", "-c", cmd);
-        try {
-            processBuilder.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

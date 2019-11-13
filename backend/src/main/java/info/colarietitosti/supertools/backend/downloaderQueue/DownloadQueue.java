@@ -19,6 +19,7 @@ public class DownloadQueue implements Runnable {
     private final LinkedList<FileDownloader> toDoQueue = new LinkedList<>();
     private final LinkedList<FileDownloader> downloadingQueue = new LinkedList<>();
     private final LinkedList<FileDownloader> doneQueue = new LinkedList<>();
+    private Boolean running = false;
 
     private void downloadNext(){
         FileDownloader todo = toDoQueue.get(0);
@@ -50,6 +51,7 @@ public class DownloadQueue implements Runnable {
             List<FileDownloader> done = downloadingQueue.parallelStream().filter(FileDownloader::isDone).collect(Collectors.toList());
             done.stream().forEach(d -> downloadingQueue.remove(d));
             doneQueue.addAll(done);
+            this.running = downloading.size() > 0;
             /*
             log.info("Queue status: ");
             log.info("\ttodo: "+toDoQueue.size());
@@ -62,5 +64,9 @@ public class DownloadQueue implements Runnable {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void clearDone(){
+        this.doneQueue.clear();
     }
 }

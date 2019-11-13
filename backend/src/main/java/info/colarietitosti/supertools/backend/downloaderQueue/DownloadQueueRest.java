@@ -30,6 +30,17 @@ public class DownloadQueueRest {
         return result;
     }
 
+    @RequestMapping(method = RequestMethod.GET, value="/queueRunning")
+    @ResponseBody
+    public Boolean getRunning(){
+        return downloadQueue.getRunning();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value="/clearQueue")
+    public void clearQueue(){
+        downloadQueue.clearDone();
+    }
+
     @PostMapping(path="/startDownloads")
     @ResponseBody
     public String startUpdate(){

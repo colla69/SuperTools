@@ -33,6 +33,7 @@ public class Config {
         addSeries("Timeless (2016)", "timeless-2", 2);
         addSeries("Rick and Morty", "rick_and_morty", 4);
         addSeries("Shameless USA", "Shameless_USA", 10);
+        //addSeries("Your Pretty Face is Going to Hell", "Your_Pretty_Face_Is_Going_to_Hell", 1,2,3);
     }
 
     private void addSeries(String name, String linkpart, Integer ... num ){
