@@ -85,6 +85,14 @@ public class IpLogRest {
             "        ssl_certificate /etc/letsencrypt/live/dash.colarietitosti.info/fullchain.pem; # managed by Certbot\n" +
             "        ssl_certificate_key /etc/letsencrypt/live/dash.colarietitosti.info/privkey.pem; # managed by Certbot\n" +
             "\n" +
+            "        location / {\n" +
+            "                proxy_set_header X-Real-IP  \\$remote_addr;\n" +
+            "                proxy_set_header X-Forwarded-For \\$remote_addr;\n" +
+            "                proxy_set_header Host \\$host;\n" +
+            "                proxy_pass  https://localhost:9998;\n" +
+            "                proxy_redirect off;\n" +
+            "        }\n" +
+            "\n" +
             "        location /backend {\n" +
             "                proxy_set_header X-Real-IP  \\$remote_addr;\n" +
             "                proxy_set_header X-Forwarded-For \\$remote_addr;\n" +
