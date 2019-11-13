@@ -44,7 +44,7 @@ public class IpLogRest {
                 System.out.println("saving new ip: "+ip);
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
-                String newNginxConf = String.format(nginxConf,ip,ip);
+                String newNginxConf = String.format(nginxConf,ip,ip,ip);
                 System.out.println( newNginxConf );
                 System.out.println("reconfiguring nginx... ");
                 //this.execShellCmd("rm /etc/nginx/conf.d/dash.colarietitosti.info.conf");
@@ -89,7 +89,7 @@ public class IpLogRest {
             "                proxy_set_header X-Real-IP  \\$remote_addr;\n" +
             "                proxy_set_header X-Forwarded-For \\$remote_addr;\n" +
             "                proxy_set_header Host \\$host;\n" +
-            "                proxy_pass  https://localhost:9998;\n" +
+            "                proxy_pass  https://%s:9998;\n" +
             "                proxy_redirect off;\n" +
             "        }\n" +
             "\n" +
