@@ -2,8 +2,9 @@ version: '2.3'
 
 services:
   frontend:
-    build: ..
+    build: ./
+    command: "npm run serve"
     ports:
-      - "8080:9998"
+      - "80:80"
     restart: always
-    mem_limit: 200m
+    mem_limit: 350m
