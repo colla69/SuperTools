@@ -3,18 +3,15 @@ import App from './App.vue'
 import Vuetify from 'vuetify'
 import VueRouter from "vue-router";
 import 'vuetify/dist/vuetify.min.css'
-import Home from "./components/Home";
-import Visitors from "./components/visitors/visitors"
-import DownloaderQueue from "./components/downloader/DownloaderQueue";
 
 Vue.use(Vuetify);
 Vue.use(VueRouter)
 Vue.config.productionTip = false;
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/visitors', component: Visitors },
-  { path: '/downloader', component: DownloaderQueue }
+  { path: '/', component:() => import("./components/Home.vue")},
+  { path: '/visitors', component: () => import("./components/visitors/visitors.vue")},
+  { path: '/downloader', component: () => import("./components/downloader/DownloaderQueue.vue")}
 ];
 
 const router = new VueRouter({

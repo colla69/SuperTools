@@ -1,12 +1,16 @@
 <template>
     <div>
         <v-toolbar flat dense style="margin: 10px">
-                <v-btn id="btn" @click="startDownload"  >Start Download Series</v-btn>
-                <v-btn id="btn"  @click="uploadSeries" >Upload Series</v-btn>
-                <v-spacer></v-spacer>
-                <v-btn id="btn"  @click="clear" >clear queue</v-btn>
+            <v-btn id="btn" @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
+            <v-btn id="btn"  @click="uploadSeries" :disabled="syncRunning">Upload Series</v-btn>
+            <v-spacer></v-spacer>
+            <v-card v-if="syncRunning" flat id="status-alert">Syncing Plex</v-card>
+            <v-card v-if="queueRunning" flat id="status-alert" >Queue Running</v-card>
+            <v-card v-if="searchRunning" flat id="status-alert" >Search Running</v-card>
+            <v-spacer></v-spacer>
+            <v-btn id="btn"  @click="clear" >clear queue</v-btn>
         </v-toolbar>
-        <div class="queues" :key="componentKey" >
+        <div class="queues"  >
             <Downloader style="margin-left: 10px;margin-right: 5px;" title="Todo" v-bind:queue="todo"></Downloader>
             <Downloader title="Downloading" v-bind:queue="downloading"></Downloader>
             <Downloader style="margin-left: 5px;" title="Done" v-bind:queue="done"></Downloader>
@@ -20,15 +24,14 @@
 
     export default {
         name: "DownloaderQueue",
-        props: {
-            todo: [],
-            downloading: [],
-            done: [],
-            running: Boolean
-        },
         data() {
             return {
-                componentKey: 0,
+                syncRunning: false,
+                queueRunning: false,
+                searchRunning: false,
+                todo: [],
+                downloading: [],
+                done: [],
             };
         },
         components: {
@@ -36,12 +39,14 @@
         },
         methods: {
             startDownload: function () {
+                this.searchRunning = true;
                 axios.post('/backend/startDownloads');
             },
             clear: function () {
                 axios.get('/backend/clearQueue');
             },
             uploadSeries: function () {
+                this.syncRunning = true;
                 axios.get('/backend/syncTvShows');
             },
             refresh: function () {
@@ -51,11 +56,14 @@
                         this.todo = queues["todo"];
                         this.downloading = queues["downloading"];
                         this.done = queues["done"];
+                        this.syncRunning = queues["syncRunning"];
+                        this.queueRunning = queues["queueRunning"];
+                        this.searchRunning = queues["searchRunning"];
                     });
                 this.componentKey += 1;
             }
         },
-        mounted(){
+        created(){
             this.refresh();
             setInterval(this.refresh, 5000);
         },
@@ -70,7 +78,11 @@
         display: grid;
         grid-template-columns: 33% 33% 33% ;
     }
+    #status-alert{
+        margin-right: 10px;
+    }
     #btn{
         margin-right: 5px;
     }
+
 </style>

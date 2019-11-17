@@ -29,20 +29,27 @@
         components: {
             AppCard
         },
-        props: {
-            "title": String,
-            "tv": [],
-            "utils": [],
-            "links": [],
+        data() {
+            return{
+                title: "",
+                tv: [],
+                utils: [],
+                links: [],
+            };
         },
-        mounted(){
-            axios.get('/backend/dashApps')
-                .then(response => {
-                    let apps = response.data;
-                    this.tv = apps["dashTv"];
-                    this.links = apps["dashApps"];
-                    this.utils = apps["dashUtils"];
-                })
+        methods: {
+            load: function () {
+                axios.get('/backend/dashApps')
+                    .then(response => {
+                        let apps = response.data;
+                        this.tv = apps["dashTv"];
+                        this.links = apps["dashApps"];
+                        this.utils = apps["dashUtils"];
+                    })
+            },
+        },
+        created(){
+            this.load();
         }
     }
 </script>
