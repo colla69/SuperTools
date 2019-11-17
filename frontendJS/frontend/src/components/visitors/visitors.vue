@@ -26,7 +26,7 @@
             visitors : []
         },
         mounted(){
-            axios.get('/visitors')
+            axios.get('/backend/visitors')
                     .then(response => { this.visitors = response.data; })
         }
     }
