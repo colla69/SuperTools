@@ -1,6 +1,7 @@
 package info.colarietitosti.supertools.backend.tools.Series;
 
 import info.colarietitosti.supertools.backend.tools.Config;
+import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Episode;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
 import lombok.extern.java.Log;
@@ -8,6 +9,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,6 +36,10 @@ public class SeriesSearch {
 
     @Autowired
     Config config;
+
+    @Autowired
+    FirefoxDriverFactory firefoxDriverFactory;
+
 
     public List<Serie> searchSeriesForDownload(){
         String outPath = config.getOutPath();
@@ -95,16 +106,28 @@ public class SeriesSearch {
         }
         List<String> epiLinks = new ArrayList<>();
         Elements lines = doc.getElementsByClass("watchlink");
+        FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
         for (Element line : lines){
             String epilinkEnc = line.attr("href");
-            String epiLinkBase = epilinkEnc.substring(epilinkEnc.indexOf("r=")+2,epilinkEnc.length());
+            driver.get(epilinkEnc);
+            try {
+                WebDriverWait wait = new WebDriverWait(driver, 5);
+                wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
+            } catch (TimeoutException e){
+                continue;
+            }
+            WebElement el = driver.findElement(By.className("push_button"));
             try{
-                String epiLink =  new String(Base64.getDecoder().decode(epiLinkBase));
+                String epiLink = el.getAttribute("href");
                 epiLinks.add(epiLink);
+                if (epiLink.length() % 15 ==0){
+                    log.info(String.format("added %d links..", epiLink.length()));
+                }
             } catch (Exception e) {
                 continue;
             }
         }
+        driver.close();
         return epiLinks;
     }
 

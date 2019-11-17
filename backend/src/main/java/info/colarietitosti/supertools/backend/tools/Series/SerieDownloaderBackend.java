@@ -72,9 +72,11 @@ public class SerieDownloaderBackend {
                     continue;
                 }
             } catch (IOException | ClassCastException e) {
-                continue;
+                e.printStackTrace();
             }
         }
+
+
         log.info("\tNothing to download from vshare");
         return Boolean.FALSE;
     }
@@ -99,7 +101,7 @@ public class SerieDownloaderBackend {
                         continue;
                     }
                 } catch (MalformedURLException | IndexOutOfBoundsException ex){
-                    continue;
+                    ex.printStackTrace();;
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,30 +118,35 @@ public class SerieDownloaderBackend {
     public Boolean downloadFromVidotodo(List<String> watchLinks, Episode episode){
         log.info("\tStarting vidtodo search...");
         watchLinks = filterLinksByName(watchLinks, "vidtodo.com");
+        FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
         for (String link : watchLinks){
             Document doc = null;
             try {
-                FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
                 try {
                     driver.get(link);
+                    log.info(driver.toString());
                     WebDriverWait wait = new WebDriverWait(driver, 15);
                     wait.until(ExpectedConditions.elementToBeClickable(By.className("vjs-big-play-button")));
                     WebElement el = driver.findElement(By.className("vjs-big-play-button"));
                     driver.executeScript("arguments[0].click();", el);
                     WebElement video = driver.findElement(By.className("vjs-tech"));
                     String dlink = video.getAttribute("src");
+
                     if (checkAndDownload(dlink, episode)){
+                        driver.close();
                         return Boolean.TRUE;
                     } else {
                         continue;
                     }
+
                 } catch (MalformedURLException | IndexOutOfBoundsException | TimeoutException ex){
-                    continue;
+                    ex.printStackTrace();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        driver.close();
         log.info("\tNothing to download from vidtodo");
         return Boolean.FALSE;
     }

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 public class DownloadQueueRest {
 
     @Autowired
@@ -20,7 +20,7 @@ public class DownloadQueueRest {
     @Autowired
     SeriesWorker seriesWorker;
 
-    @RequestMapping(method = RequestMethod.GET, value="/queues")
+    @GetMapping("/queues")
     @ResponseBody
     public DownloadQueueDO getAllApps() {
         DownloadQueueDO result =  new DownloadQueueDO();

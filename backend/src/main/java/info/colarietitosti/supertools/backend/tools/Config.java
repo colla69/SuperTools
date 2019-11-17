@@ -34,6 +34,7 @@ public class Config {
         addSeries("Rick and Morty", "rick_and_morty", 4);
         addSeries("Shameless USA", "Shameless_USA", 10);
         //addSeries("Your Pretty Face is Going to Hell", "Your_Pretty_Face_Is_Going_to_Hell", 1,2,3);
+
     }
 
     private void addSeries(String name, String linkpart, Integer ... num ){
@@ -41,4 +42,5 @@ public class Config {
             series.add(new Serie(n, linkpart, name));
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package info.colarietitosti.supertools.backend.ipService;
 
 import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 
-@Log
+@Slf4j
 @Component
 public class PingHome {
 
