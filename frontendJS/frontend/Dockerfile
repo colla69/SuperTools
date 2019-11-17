@@ -9,9 +9,9 @@ RUN npm install
 RUN npm install @vue/cli@3.7.0 -g
 COPY . .
 #CMD ["npm", "run", "serve"]
-RUN npm run build
+RUN npm run dev
 
 FROM nginx
-COPY  --from=build /dist /usr/share/nginx/html
+COPY  --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
