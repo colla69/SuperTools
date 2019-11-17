@@ -26,9 +26,10 @@ public class VisitorsRest {
             Set<VisitorIps> visitorIps = getVisitorIps();
             Set<MyIps> myIps = getMyIps();
             List<String> myKnownIps = myIps.parallelStream().map(MyIps::getIp).collect(Collectors.toList());
-
             result = visitorIps.parallelStream()
-                    .filter(v -> myKnownIps.contains(v.getIp_addr()))
+                    .filter(v -> !v.getIp_addr().startsWith("66.249"))
+                    .filter(v -> !v.getIp_addr().isEmpty())
+                    .filter(v -> !myKnownIps.contains(v.getIp_addr()))
                     .sorted(new Comparator<VisitorIps>() {
                         @Override
                         public int compare(VisitorIps o1, VisitorIps o2) {
