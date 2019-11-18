@@ -2,7 +2,7 @@
     <div>
         <v-toolbar flat dense style="margin: 10px">
             <v-btn id="btn" @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
-            <v-btn id="btn"  @click="uploadSeries" :disabled="syncRunning">Upload Series</v-btn>
+            <v-btn id="btn"  @click="uploadSeries" :disabled="disableSyncButton">Upload Series</v-btn>
             <v-spacer></v-spacer>
             <v-card v-if="syncRunning" flat id="status-alert">Syncing Plex</v-card>
             <v-card v-if="queueRunning" flat id="status-alert" >Queue Running</v-card>
@@ -29,6 +29,7 @@
                 syncRunning: false,
                 queueRunning: false,
                 searchRunning: false,
+                disableSyncButton: false,
                 todo: [],
                 downloading: [],
                 done: [],
@@ -59,11 +60,12 @@
                         this.syncRunning = queues["syncRunning"];
                         this.queueRunning = queues["queueRunning"];
                         this.searchRunning = queues["searchRunning"];
+                        this.disableSyncButton = this.syncRunning || this.queueRunning || this.searchRunning;
                     });
                 this.componentKey += 1;
             }
         },
-        created(){
+        mounted(){
             this.refresh();
             setInterval(this.refresh, 5000);
         },

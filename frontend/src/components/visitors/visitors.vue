@@ -25,7 +25,7 @@
         props: {
             visitors : []
         },
-        created(){
+        mounted(){
             axios.get('/backend/visitors')
                     .then(response => { this.visitors = response.data; })
         }
