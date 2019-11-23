@@ -1,5 +1,0 @@
-#!/bin/bash
-
-#needs manual install
-
-cp -s dyndns.service /etc/systemd/system/dyndns.service
