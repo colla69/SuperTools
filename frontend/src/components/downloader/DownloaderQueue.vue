@@ -4,13 +4,18 @@
             <v-btn id="btn" @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
             <v-btn id="btn"  @click="uploadSeries" :disabled="disableSyncButton">Upload Series</v-btn>
             <v-spacer></v-spacer>
-            <v-card v-if="syncRunning" flat id="status-alert">Syncing Plex</v-card>
-            <v-card v-if="queueRunning" flat id="status-alert" >Queue Running</v-card>
-            <v-card v-if="searchRunning" flat id="status-alert" >Search Running</v-card>
+
+            <v-card v-if="syncRunning" flat id="status-alert">
+                Syncing Plex
+            </v-card>
+            <v-card v-if="searchRunning" flat id="status-alert" >
+                Search Running
+             </v-card>
             <v-spacer></v-spacer>
             <v-btn id="btn"  @click="clear" >clear queue</v-btn>
         </v-toolbar>
-        <div class="queues"  >
+        <MusicDownloader id="music"></MusicDownloader>
+        <div class="queues">
             <Downloader style="margin-left: 10px;margin-right: 5px;" title="Todo" v-bind:queue="todo"></Downloader>
             <Downloader title="Downloading" v-bind:queue="downloading"></Downloader>
             <Downloader style="margin-left: 5px;" title="Done" v-bind:queue="done"></Downloader>
@@ -21,6 +26,7 @@
 <script>
     import axios from 'axios';
     import Downloader from "./Downloader";
+    import MusicDownloader from "./MusicDownloader";
 
     export default {
         name: "DownloaderQueue",
@@ -36,7 +42,8 @@
             };
         },
         components: {
-            Downloader
+            Downloader,
+            MusicDownloader
         },
         methods: {
             startDownload: function () {
@@ -60,7 +67,7 @@
                         this.syncRunning = queues["syncRunning"];
                         this.queueRunning = queues["queueRunning"];
                         this.searchRunning = queues["searchRunning"];
-                        this.disableSyncButton = this.syncRunning || this.queueRunning || this.searchRunning;
+                        this.disableSyncButton = !this.syncRunning || this.queueRunning;
                     });
                 this.componentKey += 1;
             }
@@ -69,13 +76,15 @@
             this.refresh();
             setInterval(this.refresh, 5000);
         },
-        beforeDestroy () {
-            clearInterval(this.timer)
-        }
     }
 </script>
 
 <style scoped>
+    #music{
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
     .queues{
         display: grid;
         grid-template-columns: 33% 33% 33% ;

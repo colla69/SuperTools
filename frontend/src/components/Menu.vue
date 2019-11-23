@@ -15,6 +15,11 @@
                 Downloader
             </v-btn>
         </router-link>
+        <a href="https://dash.colarietitosti.info/jupyter">
+            <v-btn id="menuBtn" >
+                Jupyter Lab
+            </v-btn>
+        </a>
     </v-toolbar>
 </template>
 
