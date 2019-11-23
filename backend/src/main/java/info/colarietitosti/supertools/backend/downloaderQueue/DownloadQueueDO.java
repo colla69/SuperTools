@@ -11,5 +11,8 @@ public class DownloadQueueDO {
     private List<String> todo;
     private List<String> downloading;
     private List<String> done;
+    private boolean syncRunning;
+    private boolean queueRunning;
+    private boolean searchRunning;
 
 }

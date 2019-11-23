@@ -47,8 +47,6 @@ public class FileDownloader implements Runnable {
             this.done = true;
             log.info("done!");
         } catch (IOException e) {
-            // handle exception
-            log.warning("couldn't download " + link);
             e.printStackTrace();
         }
     }

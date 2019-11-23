@@ -3,13 +3,14 @@ package info.colarietitosti.supertools.backend.tools.Series;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
+import lombok.Getter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Log
+@Log @Getter
 @Component
 public class SeriesWorker {
 
@@ -22,7 +23,10 @@ public class SeriesWorker {
     @Autowired
     DownloadQueue downloadQueue;
 
+    private boolean running;
+
     public void updateSeries(){
+        this.running = true;
         List<Serie> series = seriesSearch.searchSeriesForDownload();
         series.forEach(s ->{
             s.getEpis().forEach(e -> {
@@ -32,19 +36,9 @@ public class SeriesWorker {
                         serieDownloaderBackend.downloadFromVidotodo(links, e) ||
                         serieDownloaderBackend.downloadFromVshare(links, e) ||
                         serieDownloaderBackend.downloadFromVidoza(links, e) ;
-                /*
-                Future<Boolean> futureVidoza = serieDownloaderBackend.asyncDownloadFromVidoza(links);
-                Future<Boolean> futureVshare = serieDownloaderBackend.asyncDownloadFromVshare(links);
-                while (!(futureVidoza.isDone() && futureVshare.isDone())) {
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                */
                 log.info("Search completed!");
             });
         });
+        this.running = false;
     }
 }

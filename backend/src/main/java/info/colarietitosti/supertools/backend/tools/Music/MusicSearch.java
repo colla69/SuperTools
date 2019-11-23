@@ -15,16 +15,19 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
+
+
+import static java.lang.Thread.sleep;
 
 @Log
 public class MusicSearch {
 
     private final String baseSearch = "http://slider.kz/#";
 
-    @Autowired
-    FirefoxDriverFactory firefoxDriverFactory;
 
     public Artist searchArtist(String artist, String artistLink){
         String baseLink = "https://www.discogs.com";
@@ -35,7 +38,7 @@ public class MusicSearch {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Element table = doc.select("tbody").get(2);
+        Element table = doc.getElementById("artist");
         Elements rows = table.select("tr");
         for (int i = 1; i < rows.size(); i++) {
             Element row = rows.get(i);
@@ -50,12 +53,20 @@ public class MusicSearch {
         for (Album album : result.getAlbums()){
             try {
                 doc = Jsoup.connect(album.getLink()).get();
-
                 Elements info = doc.getElementsByClass("profile");
                 Elements divs = info.select("div");
-                String genreString = divs.get(2).text();
-                String genre = genreString.split(",")[0];
-                String year = divs.get(6).text();
+                String genre = "";
+                String year = "";
+                for (int i = 0; i < divs.size(); i++){
+                    Element div = divs.get(i);
+                    if (div.text().equals("Genre:")){
+                        i++;
+                        genre = divs.get(i).text().split(",")[0];
+                    } else if (div.text().equals("Year:")){
+                        i++;
+                        year = divs.get(i).text();
+                    }
+                }
                 album.setYear(year);
                 album.setGenre(genre);
                 Elements songtable = doc.getElementsByClass("tracklist_track_title");
@@ -64,19 +75,18 @@ public class MusicSearch {
                     String title = songtable.get(i).text();
                     album.getTracks().add(new Track(i+1, title));
                 }
-                break;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            //break;
         }
         return result;
     }
 
-   public String searchSong(String sText) {
+   public String searchSong(String sText, FirefoxDriver driver) {
         log.info("Search started: "+sText);
         sText = sText.replace(" ","%20");
         String sLink = baseSearch.concat(sText);
-        FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
         try{
             driver.get(sLink);
             WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -84,14 +94,17 @@ public class MusicSearch {
             WebElement el = driver.findElement(By.id("liveaudio"));
             WebElement dwn = el.findElement(By.tagName("a"));
             String dwnLink = dwn.getAttribute("href");
-
             log.info("found :"+dwnLink+"\n"+"in "+sLink);
-            driver.close();
+            sleep(1000);
             return dwnLink;
         } catch (Exception e){
             log.severe("error finding Download Link in "+sLink);
-            e.printStackTrace();
-            driver.close();
+            //e.printStackTrace();
+            try {
+                sleep(1000);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
             return "";
         }
     }

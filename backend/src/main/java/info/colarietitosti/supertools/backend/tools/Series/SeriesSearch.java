@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -42,7 +41,7 @@ public class SeriesSearch {
 
 
     public List<Serie> searchSeriesForDownload(){
-        String outPath = config.getOutPath();
+        String outPath = config.getSeriesOutPath();
         String doneOutput = outPath.concat("done/");
         new File(doneOutput).mkdirs();
         List<Serie> todo = config.getSeries();

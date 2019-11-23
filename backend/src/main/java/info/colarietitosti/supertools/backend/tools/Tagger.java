@@ -1,6 +1,7 @@
 package info.colarietitosti.supertools.backend.tools;
 
 import com.mpatric.mp3agic.*;
+import lombok.extern.java.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+@Log
 public class Tagger {
 
     public void tagTracksRecursiveByPath(String rootPath){
@@ -39,11 +41,17 @@ public class Tagger {
     }
 
     private void tagByPath(Path path){
-        Path infos = path.subpath(1,path.getNameCount());
+        final int len = path.getNameCount();
+        Path infos = path.subpath(len-3, path.getNameCount());
+        log.info(path.toString());
+        log.info(infos.toString());
+
         List<String> s = Arrays.asList(infos.toString().split("/"));
         String artist = s.get(0);
         String albumString = s.get(1);
+
         String[] albInfo = albumString.split("_");
+        log.info(albInfo.toString());
 
         String album = albInfo[0];
         String year = albInfo[1];

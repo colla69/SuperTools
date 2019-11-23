@@ -157,8 +157,8 @@ public class SerieDownloaderBackend {
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
             log.info("\tadding to Download Queue: ".concat(dlink));
-            String donePath = config.getOutPath().concat("done/").concat(episode.getName());
-            String savePath = config.getOutPath()
+            String donePath = config.getSeriesOutPath().concat("done/").concat(episode.getName());
+            String savePath = config.getSeriesOutPath()
                     .concat(episode.getSerie().getName()).concat("/s")
                     .concat(episode.getSerie().getNo().toString()).concat("/");
             downloadQueue.put(new FileDownloader(dlink, savePath, episode.getName(),"touch \"".concat(donePath).concat("\"")));
