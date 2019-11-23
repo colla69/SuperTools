@@ -1,0 +1,15 @@
+[Unit]
+Description=backend
+
+[Service]
+Type=simple
+PIDFile=/run/backend.pid
+ExecStart=/usr/bin/java -jar /home/cola/sandbox/supertools/backend/release/backend-0.0.1-SNAPSHOT.jar
+User=root
+Group=root
+WorkingDirectory=/home/cola/sandbox/supertools/backend/release
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
