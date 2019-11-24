@@ -1,12 +1,11 @@
 
 module.exports = {
   publicPath: '/',
-
   devServer: {
     disableHostCheck: true,
     proxy: {
       "/backend": {
-        target: "https://dash.colarietitosti.info",
+        target: "https://localhost:8443",
         changeOrigin: true
       },
       "/visitors": {

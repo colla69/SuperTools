@@ -72,7 +72,7 @@
                 this.componentKey += 1;
             }
         },
-        mounted(){
+        async mounted(){
             this.refresh();
             setInterval(this.refresh, 5000);
         },
