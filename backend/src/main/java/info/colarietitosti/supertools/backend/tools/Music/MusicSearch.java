@@ -40,7 +40,7 @@ public class MusicSearch {
         }
         Element table = doc.getElementById("artist");
         Elements rows = table.select("tr");
-        for (int i = 1; i < rows.size(); i++) {
+        for (int i = 0; i < rows.size(); i++) {
             Element row = rows.get(i);
             Elements cols = row.getElementsByClass("title");
             for (Element c : cols){
@@ -59,12 +59,17 @@ public class MusicSearch {
                 String year = "";
                 for (int i = 0; i < divs.size(); i++){
                     Element div = divs.get(i);
-                    if (div.text().equals("Genre:")){
+                    if (div.text().toLowerCase().contains("genre")){
                         i++;
                         genre = divs.get(i).text().split(",")[0];
-                    } else if (div.text().equals("Year:")){
+                        //log.info("genre:"+genre);
+                    } else if (
+                            div.text().toLowerCase().contains("year") ||
+                            div.text().toLowerCase().contains("released")
+                        ){
                         i++;
                         year = divs.get(i).text();
+                        //log.info("year:"+year);
                     }
                 }
                 album.setYear(year);
@@ -95,13 +100,13 @@ public class MusicSearch {
             WebElement dwn = el.findElement(By.tagName("a"));
             String dwnLink = dwn.getAttribute("href");
             log.info("found :"+dwnLink+"\n"+"in "+sLink);
-            sleep(1000);
+            sleep(500);
             return dwnLink;
         } catch (Exception e){
             log.severe("error finding Download Link in "+sLink);
             //e.printStackTrace();
             try {
-                sleep(1000);
+                sleep(500);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }

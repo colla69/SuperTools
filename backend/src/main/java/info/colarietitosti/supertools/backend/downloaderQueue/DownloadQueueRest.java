@@ -40,18 +40,33 @@ public class DownloadQueueRest {
         return result;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value="/clearQueue")
-    public void clearQueue(){
+    @GetMapping("/clearQueue")
+    public String clearQueue(){
         downloadQueue.clearDone();
+        return String.valueOf(200);
     }
 
-    @PostMapping(path="/startDownloads")
+    @PostMapping("/startDownloads")
     @ResponseBody
     public String startUpdate(){
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 seriesWorker.updateSeries();
+            }
+        });
+        t.start();
+        return String.valueOf(200);
+    }
+
+    @PostMapping(value = "/startMusicDownloads", consumes = "application/json")
+    @ResponseBody
+    public String startMusicDownloads(@RequestBody Map<String, String> payload){
+        System.out.println(payload);
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                musicDownload.downloadAndTag(payload.get("artist"), payload.get("linkpart"));
             }
         });
         t.start();

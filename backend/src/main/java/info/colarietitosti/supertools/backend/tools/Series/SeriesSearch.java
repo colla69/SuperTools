@@ -105,7 +105,13 @@ public class SeriesSearch {
         }
         List<String> epiLinks = new ArrayList<>();
         Elements lines = doc.getElementsByClass("watchlink");
-        FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+        FirefoxDriver driver = null;
+        try {
+            driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
         for (Element line : lines){
             String epilinkEnc = line.attr("href");
             driver.get(epilinkEnc);

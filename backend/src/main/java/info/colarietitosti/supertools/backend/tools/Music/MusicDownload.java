@@ -45,7 +45,12 @@ public class MusicDownload {
         log.info("done!\n");
         for (Album album : artist.getAlbums()){
             album.getTracks().stream().forEach( track -> {
-                FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+                FirefoxDriver driver = null;
+                try {
+                    driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+                } catch (Exception e) {
+                    return;
+                }
                 String link = musicSearch.searchSong(artist.getName()+" "+track.getName(), driver);
                 driver.quit();
                 if (link.equals("")){
@@ -54,7 +59,8 @@ public class MusicDownload {
                 String separator = "_";
                 String pathSeparator = "/";
                 String downPath = config.getMusicOutPath().concat("downloads/").concat(artist.getName()).concat(pathSeparator).concat(album.getName())
-                        .concat(separator).concat(album.getYear()).concat(separator).concat(album.getGenre()).concat(pathSeparator);
+                        .concat(separator).concat(album.getYear()).concat(pathSeparator);
+                        //.concat(separator).concat(album.getYear()).concat(separator).concat(album.getGenre()).concat(pathSeparator);
                 downloadQueue.put(new FileDownloader(link, downPath, track.getNo()+" "+track.getName().concat(".mp3"),""));
             });
             while (downloadQueue.getRunning()){

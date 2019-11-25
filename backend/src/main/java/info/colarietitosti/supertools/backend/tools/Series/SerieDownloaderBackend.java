@@ -19,7 +19,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -118,7 +117,13 @@ public class SerieDownloaderBackend {
     public Boolean downloadFromVidotodo(List<String> watchLinks, Episode episode){
         log.info("\tStarting vidtodo search...");
         watchLinks = filterLinksByName(watchLinks, "vidtodo.com");
-        FirefoxDriver driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+        FirefoxDriver driver = null;
+        try {
+            driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
         for (String link : watchLinks){
             Document doc = null;
             try {

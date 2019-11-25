@@ -54,8 +54,13 @@ public class Tagger {
         log.info(albInfo.toString());
 
         String album = albInfo[0];
-        String year = albInfo[1];
-        String genre = albInfo[2];
+        String year = "";
+        try {
+            year = albInfo[1];
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        // String genre = albInfo[2];
         String fileName = s.get(2);
         String title = fileName.substring(2, fileName.length()-4);
         String no = fileName.substring(0,2);
