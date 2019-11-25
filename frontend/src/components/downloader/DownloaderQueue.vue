@@ -67,7 +67,7 @@
                         this.syncRunning = queues["syncRunning"];
                         this.queueRunning = queues["queueRunning"];
                         this.searchRunning = queues["searchRunning"];
-                        this.disableSyncButton = !this.syncRunning || this.queueRunning;
+                        this.disableSyncButton = this.queueRunning || this.syncRunning ;
                     });
                 this.componentKey += 1;
             }
