@@ -74,8 +74,6 @@ public class SerieDownloaderBackend {
                 e.printStackTrace();
             }
         }
-
-
         log.info("\tNothing to download from vshare");
         return Boolean.FALSE;
     }
@@ -136,14 +134,12 @@ public class SerieDownloaderBackend {
                     driver.executeScript("arguments[0].click();", el);
                     WebElement video = driver.findElement(By.className("vjs-tech"));
                     String dlink = video.getAttribute("src");
-
                     if (checkAndDownload(dlink, episode)){
                         driver.close();
                         return Boolean.TRUE;
                     } else {
                         continue;
                     }
-
                 } catch (MalformedURLException | IndexOutOfBoundsException | TimeoutException ex){
                     ex.printStackTrace();
                 }

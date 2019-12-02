@@ -32,6 +32,7 @@ public class SeriesWorker {
             s.getEpis().forEach(e -> {
                 log.info("Starting Episode Search for: ".concat(e.getName()));
                 List<String> links = seriesSearch.getLinksFromEpiPage(e);
+                log.info("Starting Download Search for: ".concat(e.getName()));
                 Boolean res =
                         serieDownloaderBackend.downloadFromVidotodo(links, e) ||
                         serieDownloaderBackend.downloadFromVshare(links, e) ||

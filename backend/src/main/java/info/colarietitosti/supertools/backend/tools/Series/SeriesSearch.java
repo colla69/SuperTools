@@ -24,7 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,36 +105,65 @@ public class SeriesSearch {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        List<String> epiLinks = new ArrayList<>();
-        Elements lines = doc.getElementsByClass("watchlink");
-        FirefoxDriver driver = null;
+        List<String> epiLinks = Collections.synchronizedList(new ArrayList<String>());
+        Elements liness = doc.select("tr");
+        List<String> lines = liness.stream().filter(l ->
+                l.className().contains("vidtodo") ||
+                l.className().contains("vshare") ||
+                l.className().contains("vidoza")
+        ).map( l -> {
+            Elements el = l.getElementsByClass("watchlink");
+            return el.get(0).attr("href");
+        })
+        .limit(30)
+        .collect(Collectors.toList());
+
+        doc.getElementsByClass("watchlink");
+        /*FirefoxDriver driver = null;
         try {
             driver = firefoxDriverFactory.getFirefoxDriverHeadless();
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
-        }
-        for (Element line : lines){
-            String epilinkEnc = line.attr("href");
-            driver.get(epilinkEnc);
-            try {
-                WebDriverWait wait = new WebDriverWait(driver, 5);
-                wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
-            } catch (TimeoutException e){
-                continue;
-            }
-            WebElement el = driver.findElement(By.className("push_button"));
-            try{
-                String epiLink = el.getAttribute("href");
-                epiLinks.add(epiLink);
-                if (epiLink.length() % 15 ==0){
-                    log.info(String.format("added %d links..", epiLink.length()));
+        }*/
+        try {
+            lines.parallelStream().forEach(line -> {
+                final FirefoxDriver driver;
+                try {
+                    driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return;
                 }
-            } catch (Exception e) {
-                continue;
-            }
+                //String epilinkEnc = line.attr("href");
+                driver.get(line);
+                try {
+                    WebDriverWait wait = new WebDriverWait(driver, 1);
+                    wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
+                } catch (TimeoutException e) {
+                    driver.close();
+                    return;
+                }
+                WebElement el = driver.findElement(By.className("push_button"));
+                try {
+                    String epiLink = el.getAttribute("href");
+                    log.info(epiLink);
+                    epiLinks.add(epiLink);
+                    driver.close();
+                    if (epiLinks.size() % 15 == 0) {
+                        log.info(String.format("added %d links..", epiLinks.size()));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    driver.close();
+                    return;
+                }
+            });
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        driver.close();
+        //driver.close();
+
         return epiLinks;
     }
 
