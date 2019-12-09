@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -117,15 +118,7 @@ public class SeriesSearch {
         })
         .limit(30)
         .collect(Collectors.toList());
-
         doc.getElementsByClass("watchlink");
-        /*FirefoxDriver driver = null;
-        try {
-            driver = firefoxDriverFactory.getFirefoxDriverHeadless();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }*/
         try {
             lines.parallelStream().forEach(line -> {
                 final FirefoxDriver driver;
@@ -135,37 +128,30 @@ public class SeriesSearch {
                     e.printStackTrace();
                     return;
                 }
-                //String epilinkEnc = line.attr("href");
                 driver.get(line);
                 try {
                     WebDriverWait wait = new WebDriverWait(driver, 1);
                     wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
                 } catch (TimeoutException e) {
-                    driver.close();
-                    return;
+                    e.printStackTrace();
+                    try { driver.close(); driver.quit(); } catch (SessionNotCreatedException ex) {}
                 }
                 WebElement el = driver.findElement(By.className("push_button"));
                 try {
                     String epiLink = el.getAttribute("href");
-                    log.info(epiLink);
+                    //log.info(epiLink);
                     epiLinks.add(epiLink);
-                    driver.close();
                     if (epiLinks.size() % 15 == 0) {
                         log.info(String.format("added %d links..", epiLinks.size()));
                     }
+                    driver.close(); driver.quit();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    driver.close();
-                    return;
                 }
             });
         } catch (Exception e){
             e.printStackTrace();
         }
-        //driver.close();
-
         return epiLinks;
     }
-
-
 }

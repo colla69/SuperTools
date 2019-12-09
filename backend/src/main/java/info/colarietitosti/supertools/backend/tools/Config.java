@@ -22,6 +22,7 @@ public class Config {
 
     @PostConstruct
     public void loadSeries(){
+        addSeries("The Mandalorian", "the_mandalorian", 1);
         addSeries("Rick and Morty", "rick_and_morty", 4);
         addSeries("Shameless USA", "Shameless_USA", 10);
         addSeries("Supernatural", "supernatural", 15);
@@ -33,7 +34,7 @@ public class Config {
         addSeries("Mr Robot", "mr_robot", 4);
         addSeries("The Simpsons", "the_simpsons", 30,31);
         addSeries("The Blacklist", "The_Blacklist", 7);
-        addSeries("Timeless (2016)", "timeless-2", 2);
+        //addSeries("Timeless (2016)", "timeless-2", 2);
         //addSeries("Your Pretty Face is Going to Hell", "Your_Pretty_Face_Is_Going_to_Hell", 1,2,3);
     }
 
@@ -42,5 +43,4 @@ public class Config {
             series.add(new Serie(n, linkpart, name));
         }
     }
-
 }

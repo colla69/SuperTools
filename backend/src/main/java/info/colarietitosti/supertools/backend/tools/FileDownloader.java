@@ -29,7 +29,8 @@ public class FileDownloader implements Runnable {
 
     public void download(String link, String savePath, String title){
         new File(savePath).mkdirs();
-        String path = savePath.concat(title);
+        String path = savePath.concat(title.replace("/",""));
+
         try (BufferedInputStream in = new BufferedInputStream(new URL(link).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(path))
         {

@@ -1,7 +1,6 @@
 package info.colarietitosti.supertools.backend.tools.Series;
 
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
-import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
 import lombok.Getter;
 import lombok.extern.java.Log;

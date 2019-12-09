@@ -8,12 +8,10 @@ import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Artist;
 import info.colarietitosti.supertools.backend.tools.Tagger;
 import lombok.extern.java.Log;
+import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-
 import static java.lang.Thread.sleep;
 
 @Log
@@ -44,7 +42,7 @@ public class MusicDownload {
         Artist artist = musicSearch.searchArtist(artistName, linkPart);
         log.info("done!\n");
         for (Album album : artist.getAlbums()){
-            album.getTracks().stream().forEach( track -> {
+            album.getTracks().parallelStream().forEach( track -> {
                 FirefoxDriver driver = null;
                 try {
                     driver = firefoxDriverFactory.getFirefoxDriverHeadless();
@@ -52,7 +50,7 @@ public class MusicDownload {
                     return;
                 }
                 String link = musicSearch.searchSong(artist.getName()+" "+track.getName(), driver);
-                driver.quit();
+                try { driver.close(); driver.quit(); } catch (Exception ex) {}
                 if (link.equals("")){
                     return;
                 }
