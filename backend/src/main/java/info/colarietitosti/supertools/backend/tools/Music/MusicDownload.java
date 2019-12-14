@@ -42,7 +42,7 @@ public class MusicDownload {
         Artist artist = musicSearch.searchArtist(artistName, linkPart);
         log.info("done!\n");
         for (Album album : artist.getAlbums()){
-            album.getTracks().parallelStream().forEach( track -> {
+            album.getTracks().stream().forEach( track -> {
                 FirefoxDriver driver = null;
                 try {
                     driver = firefoxDriverFactory.getFirefoxDriverHeadless();

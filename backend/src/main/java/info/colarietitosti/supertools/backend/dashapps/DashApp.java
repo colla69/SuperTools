@@ -3,14 +3,11 @@ package info.colarietitosti.supertools.backend.dashapps;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter @Setter
 @Entity
-@Table(name="dashapps", schema = "public")
+@Table(name="dash_apps", schema = "public")
 public class DashApp implements Comparable<DashApp> {
 
     @Id @GeneratedValue
@@ -18,6 +15,8 @@ public class DashApp implements Comparable<DashApp> {
 
     private String name;
     private String link;
+
+    @Column(name="img_link")
     private String imglink;
     private String type;
 
