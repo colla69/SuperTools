@@ -1,13 +1,12 @@
 <template>
     <v-card id="list">
         <h3>{{title}}</h3>
-        <div id="list">
-        <p v-for="q in queue" v-bind:key="q">
-            {{q}}
-        </p>
+        <div id="list" dense>
+            <p style="min-height: 25px;" v-for="q in queue" v-bind:key="q">
+                {{q}}
+            </p>
         </div>
     </v-card>
-
 </template>
 
 <script>
@@ -27,9 +26,11 @@
     }
     #list{
         height: 100%;
-        display: grid;
     }
     p{
+        width: 100%;
         margin-bottom: 4px;
+        text-align: left;
+        padding-left: 10px;
     }
 </style>

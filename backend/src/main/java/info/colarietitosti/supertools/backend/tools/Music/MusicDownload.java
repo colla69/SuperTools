@@ -8,7 +8,6 @@ import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Artist;
 import info.colarietitosti.supertools.backend.tools.Tagger;
 import lombok.extern.java.Log;
-import org.openqa.selenium.SessionNotCreatedException;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +33,16 @@ public class MusicDownload {
         Tagger tagger = new Tagger();
         tagger.tagTracksRecursiveByPath(config.getMusicOutPath().concat("downloads/").concat(artist).concat("/"));
         log.info("music download terminated");
+    }
+    public void download(String artist,  String linkPart){
+        log.info("starting music download");
+        downloadArtistDiscography(artist, linkPart);
+        log.info("music download terminated");
+    }
+    public void tag(String artist){
+        Tagger tagger = new Tagger();
+        tagger.tagTracksRecursiveByPath(config.getMusicOutPath().concat("downloads/").concat(artist).concat("/"));
+
     }
 
     public void downloadArtistDiscography(String artistName, String linkPart){

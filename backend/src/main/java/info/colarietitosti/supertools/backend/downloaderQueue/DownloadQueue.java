@@ -25,6 +25,7 @@ public class DownloadQueue implements Runnable {
         toDoQueue.removeFirst();
         downloadingQueue.add(todo);
         Thread t = new Thread( todo );
+        t.setDaemon(true);
         t.start();
     }
 
@@ -35,6 +36,7 @@ public class DownloadQueue implements Runnable {
     @PostConstruct
     public void start(){
         Thread t = new Thread(this);
+        t.setDaemon(true);
         t.start();
     }
 

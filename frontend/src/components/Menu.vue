@@ -38,8 +38,6 @@
 
 <style scoped>
     #menu{
-        width: 100%;
-        display: block;
         background: lightskyblue;
         margin: 10px;
     }

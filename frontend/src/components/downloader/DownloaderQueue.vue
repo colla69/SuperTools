@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-toolbar flat dense style="margin: 10px">
+        <v-toolbar  dense style="margin: 10px">
             <v-btn id="btn" @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
             <v-btn id="btn"  @click="uploadSeries" :disabled="disableSyncButton">Upload Series</v-btn>
             <v-spacer></v-spacer>
@@ -14,7 +14,18 @@
             <v-spacer></v-spacer>
             <v-btn id="btn"  @click="clear" >clear queue</v-btn>
         </v-toolbar>
-        <MusicDownloader id="music"></MusicDownloader>
+
+        <v-expansion-panels id="music" >
+            <v-expansion-panel>
+                <v-expansion-panel-header>Music Tools</v-expansion-panel-header>
+                <v-expansion-panel-content >
+                    <v-layout id="musicpanel">
+                        <MusicDownloader ></MusicDownloader>
+                        <MusicTagger ></MusicTagger>
+                    </v-layout>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
         <div class="queues">
             <Downloader style="margin-left: 10px;margin-right: 5px;" title="Todo" v-bind:queue="todo"></Downloader>
             <Downloader title="Downloading" v-bind:queue="downloading"></Downloader>
@@ -27,6 +38,7 @@
     import axios from 'axios';
     import Downloader from "./Downloader";
     import MusicDownloader from "./MusicDownloader";
+    import MusicTagger from "./MusicTagger";
 
     export default {
         name: "DownloaderQueue",
@@ -43,7 +55,8 @@
         },
         components: {
             Downloader,
-            MusicDownloader
+            MusicDownloader,
+            MusicTagger
         },
         methods: {
             startDownload: function () {
@@ -80,10 +93,17 @@
 </script>
 
 <style scoped>
+    #musicpanel{
+        display: grid;
+        grid-template-columns: 50% 50%;
+
+    }
     #music{
         padding-left: 10px;
         padding-right: 10px;
         padding-bottom: 10px;
+        width: 100%;
+
     }
     .queues{
         display: grid;

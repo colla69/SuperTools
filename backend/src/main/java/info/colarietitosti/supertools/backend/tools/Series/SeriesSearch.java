@@ -116,7 +116,7 @@ public class SeriesSearch {
             Elements el = l.getElementsByClass("watchlink");
             return el.get(0).attr("href");
         })
-        .limit(30)
+        //.limit(60)
         .collect(Collectors.toList());
         doc.getElementsByClass("watchlink");
         try {
@@ -130,7 +130,7 @@ public class SeriesSearch {
                 }
                 driver.get(line);
                 try {
-                    WebDriverWait wait = new WebDriverWait(driver, 1);
+                    WebDriverWait wait = new WebDriverWait(driver, 3);
                     wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
                 } catch (TimeoutException e) {
                     e.printStackTrace();
@@ -139,12 +139,17 @@ public class SeriesSearch {
                 WebElement el = driver.findElement(By.className("push_button"));
                 try {
                     String epiLink = el.getAttribute("href");
-                    //log.info(epiLink);
+                    log.info(epiLink);
                     epiLinks.add(epiLink);
                     if (epiLinks.size() % 15 == 0) {
                         log.info(String.format("added %d links..", epiLinks.size()));
                     }
-                    driver.close(); driver.quit();
+                    try {
+                        driver.close();
+                        driver.quit();
+                    } catch (Exception e){
+
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

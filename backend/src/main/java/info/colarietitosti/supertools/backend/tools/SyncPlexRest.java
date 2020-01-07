@@ -17,6 +17,7 @@ public class SyncPlexRest {
                 ShellExecuter.execShellCmd("/run/media/cola/Transfer/PlexContent/syncTvShows");
             }
         });
+        t.setDaemon(true);
         t.start();
         Thread t2 = new Thread(new Runnable() {
             @Override
@@ -24,6 +25,7 @@ public class SyncPlexRest {
                 ShellExecuter.execShellCmd("/run/media/cola/Transfer/PlexContent/syncMusic");
             }
         });
+        t2.setDaemon(true);
         t2.start();
         return String.valueOf(200);
     }

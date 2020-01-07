@@ -1,27 +1,23 @@
 <template>
-    <v-expansion-panels id="musicpanel">
-        <v-expansion-panel>
-            <v-expansion-panel-header>Music Downloader</v-expansion-panel-header>
-            <v-expansion-panel-content>
-                <v-text-field dense clearable
-                        v-model="artist"
-                        label="Artist"
-                        placeholder="Artist Name"
-                >
-                </v-text-field>
-                <v-text-field dense clearable
-                        v-model="linkpart"
-                        label="linkpart"
-                        placeholder="linkpart from discogs.com"
-                >
-                </v-text-field>
-                <v-layout reverse>
-                    <v-btn small  @click="startDwld" >Start Download</v-btn>
-                    <v-btn small style="margin-right: 10px;" @click="reset">Reset</v-btn>
-                </v-layout>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-    </v-expansion-panels>
+    <v-layout id="musiclayout">
+        <h3>Download</h3>
+            <v-text-field dense clearable
+                    v-model="artist"
+                    label="Artist"
+                    placeholder="Artist Name"
+            >
+            </v-text-field>
+            <v-text-field dense clearable
+                    v-model="linkpart"
+                    label="linkpart"
+                    placeholder="linkpart from discogs.com"
+            >
+            </v-text-field>
+            <v-layout reverse>
+                <v-btn small  @click="startDwld" >Start Download</v-btn>
+                <v-btn small style="margin-right: 10px;" @click="reset">Reset</v-btn>
+            </v-layout>
+    </v-layout>
 </template>
 
 <script>
@@ -52,7 +48,11 @@
 </script>
 
 <style scoped>
-    #musicpanel {
+    h3{
+        margin-bottom: 10px;
+    }
+    #musiclayout {
         padding: 10px;
+        display: block;
     }
 </style>

@@ -24,6 +24,8 @@ const router = new VueRouter({
   routes: routes
 });
 
+import VueCompositionApi from '@vue/composition-api'
+Vue.use(VueCompositionApi);
 
 new Vue({
   data: {
