@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.downloaderQueue;
 
-import info.colarietitosti.supertools.backend.tools.Config;
+import info.colarietitosti.supertools.backend.tools.Config.Config;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.Music.MusicDownload;
 import info.colarietitosti.supertools.backend.tools.Series.SeriesWorker;

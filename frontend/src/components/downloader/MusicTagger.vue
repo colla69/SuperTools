@@ -1,5 +1,5 @@
 <template>
-    <v-layout  id="musiclayout">
+    <v-card raised id="musiclayout">
         <h3>Tag</h3>
         <v-list dense >
             <li v-for="(q,ix) in state.artists" v-bind:key="ix">
@@ -12,9 +12,9 @@
             </li>
         </v-list>
         <v-layout reverse>
-            <v-btn small @click="startTag"  >Tag Artist</v-btn>
+            <v-btn outlined small @click="startTag"  >Tag Artist</v-btn>
         </v-layout>
-    </v-layout>
+    </v-card>
 </template>
 
 <script>
@@ -71,6 +71,7 @@
 
     }
     #musiclayout {
+        margin-top: 5px;
         padding: 10px;
         display: block;
     }

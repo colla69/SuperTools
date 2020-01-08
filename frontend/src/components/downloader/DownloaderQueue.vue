@@ -1,8 +1,7 @@
 <template>
     <div>
         <v-toolbar  dense style="margin: 10px">
-            <v-btn id="btn" @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
-            <v-btn id="btn"  @click="uploadSeries" :disabled="disableSyncButton">Upload Series</v-btn>
+            <v-btn id="btn" outlined @click="startDownload" :disabled="searchRunning" >Start Download Series</v-btn>
             <v-spacer></v-spacer>
 
             <v-card v-if="syncRunning" flat id="status-alert">
@@ -12,16 +11,26 @@
                 Search Running
              </v-card>
             <v-spacer></v-spacer>
-            <v-btn id="btn"  @click="clear" >clear queue</v-btn>
+            <v-btn id="btn" outlined @click="clear" >clear queue</v-btn>
         </v-toolbar>
 
+        <v-expansion-panels id="music" >
+            <v-expansion-panel>
+                <v-expansion-panel-header>Series Tools</v-expansion-panel-header>
+                <v-expansion-panel-content >
+                    <v-layout >
+                        <SeriesConfigurator ></SeriesConfigurator>
+                    </v-layout>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
+        </v-expansion-panels>
         <v-expansion-panels id="music" >
             <v-expansion-panel>
                 <v-expansion-panel-header>Music Tools</v-expansion-panel-header>
                 <v-expansion-panel-content >
                     <v-layout id="musicpanel">
-                        <MusicDownloader ></MusicDownloader>
-                        <MusicTagger ></MusicTagger>
+                        <MusicDownloader class="elevation-5" ></MusicDownloader>
+                        <MusicTagger class="elevation-5" ></MusicTagger>
                     </v-layout>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -39,6 +48,7 @@
     import Downloader from "./Downloader";
     import MusicDownloader from "./MusicDownloader";
     import MusicTagger from "./MusicTagger";
+    import SeriesConfigurator from "./SeriesConfigurator";
 
     export default {
         name: "DownloaderQueue",
@@ -56,7 +66,8 @@
         components: {
             Downloader,
             MusicDownloader,
-            MusicTagger
+            MusicTagger,
+            SeriesConfigurator
         },
         methods: {
             startDownload: function () {
@@ -95,8 +106,7 @@
 <style scoped>
     #musicpanel{
         display: grid;
-        grid-template-columns: 50% 50%;
-
+        grid-template-columns: auto;
     }
     #music{
         padding-left: 10px;

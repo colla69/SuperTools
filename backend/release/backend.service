@@ -4,7 +4,7 @@ Description=backend
 [Service]
 Type=simple
 PIDFile=/run/backend.pid
-ExecStart=/usr/bin/java -jar /home/cola/sandbox/supertools/backend/release/backend-0.0.1-SNAPSHOT.jar > /var/log/backend.log
+ExecStart=/usr/bin/java -jar -Xmx2g -Xss256k /home/cola/sandbox/supertools/backend/release/backend-0.0.1-SNAPSHOT.jar > /var/log/backend.log
 User=root
 Group=root
 WorkingDirectory=/home/cola/sandbox/supertools/backend/release

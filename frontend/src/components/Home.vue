@@ -1,6 +1,5 @@
 <template>
-    <div class="body">
-
+    <div id="app" class="body">
         <AppCardsGroup title="Dashboard">
         </AppCardsGroup>
     </div>

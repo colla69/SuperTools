@@ -1,5 +1,5 @@
 <template>
-    <v-layout id="musiclayout">
+    <v-card raised id="musiclayout">
         <h3>Download</h3>
             <v-text-field dense clearable
                     v-model="artist"
@@ -13,11 +13,11 @@
                     placeholder="linkpart from discogs.com"
             >
             </v-text-field>
-            <v-layout reverse>
-                <v-btn small  @click="startDwld" >Start Download</v-btn>
-                <v-btn small style="margin-right: 10px;" @click="reset">Reset</v-btn>
+            <v-layout row reverse style="padding-right: 10px;">
+                <v-btn outlined small  @click="startDwld" >Start Download</v-btn>
+                <v-btn outlined small style="margin-right: 10px;" @click="reset">Reset</v-btn>
             </v-layout>
-    </v-layout>
+    </v-card>
 </template>
 
 <script>

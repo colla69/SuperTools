@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar dense id="menu">
+    <v-toolbar dense  id="menu">
         <router-link to="/">
         <v-btn id="menuBtn" >
             Home
@@ -38,8 +38,11 @@
 
 <style scoped>
     #menu{
+        padding: 0px;
         background: lightskyblue;
-        margin: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 3px;
     }
     #menuBtn{
         margin-right: 5px;

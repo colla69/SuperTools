@@ -13,13 +13,15 @@ public class Serie {
     private List<Episode> epis = new ArrayList<>();
     private String link;
     private String name;
+    private Boolean active;
 
 
-    public Serie(Integer no, String link, String name) {
+    public Serie(Integer no, String link, String name, Boolean active) {
         this.no = no;
         this.epis = epis;
         this.link = link;
         this.name = name;
+        this.active = active;
     }
 
     public void addEpisodes(List<Episode> e){

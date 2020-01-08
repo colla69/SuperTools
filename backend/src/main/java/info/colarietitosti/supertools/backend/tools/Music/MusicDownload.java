@@ -1,12 +1,11 @@
 package info.colarietitosti.supertools.backend.tools.Music;
 
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
-import info.colarietitosti.supertools.backend.tools.Config;
+import info.colarietitosti.supertools.backend.tools.Config.Config;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Artist;
-import info.colarietitosti.supertools.backend.tools.Tagger;
 import lombok.extern.java.Log;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;

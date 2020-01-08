@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Getter @Setter
 @Entity
-@Table(name="dash_apps", schema = "public")
+@Table(name="dash_apps")
 public class DashApp implements Comparable<DashApp> {
 
     @Id @GeneratedValue

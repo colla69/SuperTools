@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.tools.Series;
 
-import info.colarietitosti.supertools.backend.tools.Config;
+import info.colarietitosti.supertools.backend.tools.Config.Config;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Episode;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
@@ -27,7 +27,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,8 +47,9 @@ public class SeriesSearch {
         String doneOutput = outPath.concat("done/");
         new File(doneOutput).mkdirs();
         List<Serie> todo = config.getSeries();
+        log.info(todo.toString());
         List<String> doneList = getDoneList(doneOutput);
-        todo.parallelStream().forEach(s -> {
+        todo.parallelStream().filter(Serie::getActive).forEach(s -> {
             String serieOutPath = outPath.concat(s.getName()).concat("/");
             new File(serieOutPath).mkdirs();
             List<Episode> epis = searchEpisodes(s.getLink(), s.getNo(), s);

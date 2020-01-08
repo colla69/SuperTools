@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+   db:
+     image: mysql:5.7
+     volumes:
+       - superdb:/var/lib/mysql
+     ports:
+      - 3306:3306
+     restart: always
+     mem_limit: 500m
+     environment:
+       MYSQL_ROOT_PASSWORD: superpswtools
+       MYSQL_DATABASE: supertools
+       MYSQL_USER: superusertools
+       MYSQL_PASSWORD: supertools
+
+volumes:
+    superdb:
