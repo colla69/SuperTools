@@ -28,6 +28,7 @@ public class Config {
 
     @PostConstruct
     public void loadSeries(){
+        series.clear();
         List<SeriesConfigE> seriesConfigs = seriesConfigRepository.findAll();
         seriesConfigs.forEach(sc -> addSeries(
                 sc.getLabel(),

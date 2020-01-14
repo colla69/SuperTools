@@ -46,16 +46,18 @@ public class SeriesSearch {
         String outPath = config.getSeriesOutPath();
         String doneOutput = outPath.concat("done/");
         new File(doneOutput).mkdirs();
+        config.loadSeries();
         List<Serie> todo = config.getSeries();
-        log.info(todo.toString());
+        todo.forEach(t -> log.info(t.getName().concat(" ").concat(String.valueOf(t.getNo()))));
         List<String> doneList = getDoneList(doneOutput);
-        todo.parallelStream().filter(Serie::getActive).forEach(s -> {
+        todo.stream().filter(Serie::getActive).forEach(s -> {
+            s.getEpis().clear();
             String serieOutPath = outPath.concat(s.getName()).concat("/");
             new File(serieOutPath).mkdirs();
             List<Episode> epis = searchEpisodes(s.getLink(), s.getNo(), s);
             epis.forEach(e -> {
                 String fileName = doneOutput.concat(e.getName());
-                boolean notDone = doneList.parallelStream().filter(d -> d.contains(fileName)).collect(Collectors.toList()).isEmpty();
+                boolean notDone = doneList.parallelStream().noneMatch(d -> d.contains(fileName));
                 if (notDone) {
                     s.addEpisode(e);
                 }
@@ -109,14 +111,14 @@ public class SeriesSearch {
         List<String> epiLinks = Collections.synchronizedList(new ArrayList<String>());
         Elements liness = doc.select("tr");
         List<String> lines = liness.stream().filter(l ->
-                l.className().contains("vidtodo") ||
-                l.className().contains("vshare") ||
-                l.className().contains("vidoza")
+                        l.className().contains("vidup")||
+                        l.className().contains("vidtodo") ||
+                        l.className().contains("vshare") ||
+                        l.className().contains("vidoza")
         ).map( l -> {
             Elements el = l.getElementsByClass("watchlink");
             return el.get(0).attr("href");
         })
-        //.limit(60)
         .collect(Collectors.toList());
         doc.getElementsByClass("watchlink");
         try {

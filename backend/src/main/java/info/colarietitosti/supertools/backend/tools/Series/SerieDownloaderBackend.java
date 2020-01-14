@@ -46,10 +46,6 @@ public class SerieDownloaderBackend {
     private ExecutorService executor
             = Executors.newSingleThreadExecutor();
 
-    public Future<Boolean> asyncDownloadFromVshare(List<String> watchLinks, Episode episode){
-        return executor.submit(() -> downloadFromVshare(watchLinks, episode));
-    }
-
     public Boolean downloadFromVshare(List<String> watchLinks, Episode episode){
         log.info("\tStarting vshare search...");
         watchLinks = filterLinksByName(watchLinks, "vshare.eu");
@@ -79,10 +75,6 @@ public class SerieDownloaderBackend {
         return Boolean.FALSE;
     }
 
-    public Future<Boolean> asyncDownloadFromVidoza(List<String> watchLinks, Episode episode){
-        return executor.submit(() -> downloadFromVidoza(watchLinks, episode));
-    }
-
     public Boolean downloadFromVidoza(List<String> watchLinks, Episode episode){
         log.info("\tStarting vidoza search...");
         watchLinks = filterLinksByName(watchLinks, "vidoza.net");
@@ -107,10 +99,6 @@ public class SerieDownloaderBackend {
         }
         log.info("\tNothing to download from vidoza");
         return Boolean.FALSE;
-    }
-
-    public Future<Boolean> asyncDownloadFromVidtodo(List<String> watchLinks, Episode episode){
-        return executor.submit(() -> downloadFromVidoza(watchLinks, episode));
     }
 
     public Boolean downloadFromVidotodo(List<String> watchLinks, Episode episode){
@@ -150,6 +138,46 @@ public class SerieDownloaderBackend {
         }
         driver.close();
         log.info("\tNothing to download from vidtodo");
+        return Boolean.FALSE;
+    }
+
+    public Boolean downloadFromVidup(List<String> watchLinks, Episode episode){
+        log.info("\tStarting vidup search...");
+        watchLinks = filterLinksByName(watchLinks, "vidup.io");
+        FirefoxDriver driver = null;
+        try {
+            driver = firefoxDriverFactory.getFirefoxDriverHeadless();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Boolean.FALSE;
+        }
+        for (String link : watchLinks){
+            Document doc = null;
+            try {
+                try {
+                    driver.get(link);
+                    log.info(driver.toString());
+                    WebDriverWait wait = new WebDriverWait(driver, 15);
+                    wait.until(ExpectedConditions.elementToBeClickable(By.className("vjs-big-play-button")));
+                    WebElement el = driver.findElement(By.className("vjs-big-play-button"));
+                    driver.executeScript("arguments[0].click();", el);
+                    WebElement video = driver.findElement(By.className("vjs-tech"));
+                    String dlink = video.getAttribute("src");
+                    if (checkAndDownload(dlink, episode)){
+                        driver.close();
+                        return Boolean.TRUE;
+                    } else {
+                        continue;
+                    }
+                } catch (MalformedURLException | IndexOutOfBoundsException | TimeoutException ex){
+                    ex.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        driver.close();
+        log.info("\tNothing to download from vidup");
         return Boolean.FALSE;
     }
 

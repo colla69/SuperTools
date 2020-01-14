@@ -109,7 +109,7 @@ public class DownloadQueueRest {
         String musicOutPath = config.getMusicOutPath().concat("downloads/");
         try {
             Files.list(new File(musicOutPath).toPath())
-                    .limit(10)
+                    //.limit(10)
                     .forEach(path -> {
                         artists.add(path.getFileName().toString());
                     });
