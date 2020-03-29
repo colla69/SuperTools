@@ -1,7 +1,7 @@
 package info.colarietitosti.supertools.backend.tools;
 
 import lombok.Getter;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-@Log
+@Slf4j
 @Getter
 public class FileDownloader implements Runnable {
 

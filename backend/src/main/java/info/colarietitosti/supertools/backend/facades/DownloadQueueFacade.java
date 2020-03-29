@@ -5,7 +5,7 @@ import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.Music.MusicDownload;
 import info.colarietitosti.supertools.backend.tools.Series.SeriesWorker;
 import info.colarietitosti.supertools.backend.tools.ShellExecuter;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Log
+@Slf4j
 @Controller
 public class DownloadQueueFacade {
 

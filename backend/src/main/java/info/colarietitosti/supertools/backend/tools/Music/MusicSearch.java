@@ -1,10 +1,9 @@
 package info.colarietitosti.supertools.backend.tools.Music;
 
-import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Artist;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Track;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,16 +13,12 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
-
 
 import static java.lang.Thread.sleep;
 
-@Log
+@Slf4j
 public class MusicSearch {
 
     private final String baseSearch = "http://slider.kz/#";
@@ -103,7 +98,7 @@ public class MusicSearch {
             sleep(500);
             return dwnLink;
         } catch (Exception e){
-            log.severe("error finding Download Link in "+sLink);
+            log.error("error finding Download Link in {}", sLink);
             //e.printStackTrace();
             try {
                 sleep(500);

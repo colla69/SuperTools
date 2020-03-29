@@ -2,8 +2,7 @@ package info.colarietitosti.supertools.backend.downloaderQueue;
 
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import lombok.Getter;
-import lombok.extern.java.Log;
-import org.springframework.context.annotation.Scope;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -11,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log
+@Slf4j
 @Getter
 @Service
 public class DownloadQueue implements Runnable {

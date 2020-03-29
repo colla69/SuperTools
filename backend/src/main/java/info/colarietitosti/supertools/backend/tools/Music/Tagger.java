@@ -1,7 +1,7 @@
 package info.colarietitosti.supertools.backend.tools.Music;
 
 import com.mpatric.mp3agic.*;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-@Log
+@Slf4j
 public class Tagger {
 
     public void tagTracksRecursiveByPath(String rootPath){

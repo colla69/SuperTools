@@ -3,7 +3,7 @@ package info.colarietitosti.supertools.backend.Config;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Log
+@Slf4j
 @Controller
 public class SeriesConfigFacade {
 

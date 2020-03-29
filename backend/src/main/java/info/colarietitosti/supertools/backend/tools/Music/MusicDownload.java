@@ -1,18 +1,19 @@
 package info.colarietitosti.supertools.backend.tools.Music;
 
-import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Artist;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import static java.lang.Thread.sleep;
 
-@Log
+@Slf4j
 @Component
 public class MusicDownload {
 

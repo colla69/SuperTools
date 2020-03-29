@@ -4,7 +4,7 @@ import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
 import lombok.Getter;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log
+@Slf4j
 @Getter
 @Component
 @Scope("singleton")

@@ -1,15 +1,18 @@
 package info.colarietitosti.supertools.backend.tools;
 
-import lombok.extern.java.Log;
-import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Log
+@Slf4j
 @RestController
 public class PlexSyncFacade {
 
     @RequestMapping(value = "syncTvShows", method = RequestMethod.GET)
     @ResponseBody
-    public String syncTvShows(){
+    public String syncTvShows() {
         log.info("staring plex Sync!");
         Thread t = new Thread(new Runnable() {
             @Override
