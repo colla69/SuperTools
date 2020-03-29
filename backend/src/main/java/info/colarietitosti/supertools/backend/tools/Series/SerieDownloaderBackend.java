@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.tools.Series;
 
-import info.colarietitosti.supertools.backend.tools.Config.Config;
+import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Log
@@ -41,7 +40,7 @@ public class SerieDownloaderBackend {
     FirefoxDriverFactory firefoxDriverFactory;
 
     @Autowired
-    Config config;
+    BackendConfigutation config;
 
     private ExecutorService executor
             = Executors.newSingleThreadExecutor();

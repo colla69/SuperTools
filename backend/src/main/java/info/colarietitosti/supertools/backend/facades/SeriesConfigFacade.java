@@ -1,5 +1,8 @@
-package info.colarietitosti.supertools.backend.tools.Config;
+package info.colarietitosti.supertools.backend.Config;
 
+import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
+import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,27 +16,27 @@ import java.util.stream.Collectors;
 
 @Log
 @Controller
-public class SeriesConfigRest {
+public class SeriesConfigFacade {
 
     @Autowired
-    Config config;
+    BackendConfigutation config;
 
     @Autowired
     SeriesConfigRepository seriesConfigRepository;
 
     @GetMapping("/seriesConfig")
     @ResponseBody
-    public List<SeriesConfigE> getSeriesConfigJson(){
+    public List<SeriesConfig> getSeriesConfigJson(){
         return seriesConfigRepository.findAll();
     }
 
     @PostMapping("/saveSeriesConfig")
     @ResponseBody
-    public String saveSeriesConfig(@RequestBody List<SeriesConfigE> series){
+    public String saveSeriesConfig(@RequestBody List<SeriesConfig> series){
         try {
             series.forEach(s -> {
                 if (s.getId() != null){
-                    SeriesConfigE conf = new SeriesConfigE();
+                    SeriesConfig conf = new SeriesConfig();
                     conf.setId(s.getId());
                     conf.setActive(s.getActive());
                     conf.setLabel(s.getLabel());
@@ -55,7 +58,7 @@ public class SeriesConfigRest {
 
     @PostMapping("/deleteSeriesConfig")
     @ResponseBody
-    public String delSeriesConfig(@RequestBody SeriesConfigE serie){
+    public String delSeriesConfig(@RequestBody SeriesConfig serie){
         try {
             seriesConfigRepository.delete(serie);
             seriesConfigRepository.flush();
@@ -68,8 +71,8 @@ public class SeriesConfigRest {
 
     @GetMapping("/seriesConfigActive")
     @ResponseBody
-    public List<SeriesConfigE> getSeriesConfigActive(){
-        return seriesConfigRepository.findAll().stream().filter(SeriesConfigE::getActive).collect(Collectors.toList());
+    public List<SeriesConfig> getSeriesConfigActive(){
+        return seriesConfigRepository.findAll().stream().filter(SeriesConfig::getActive).collect(Collectors.toList());
     }
 
 }

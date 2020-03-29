@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.tools.Series;
 
-import info.colarietitosti.supertools.backend.tools.Config.Config;
+import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Episode;
 import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
 public class SeriesSearch {
 
     @Autowired
-    Config config;
+    BackendConfigutation config;
 
     @Autowired
     FirefoxDriverFactory firefoxDriverFactory;

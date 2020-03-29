@@ -1,7 +1,7 @@
 package info.colarietitosti.supertools.backend.tools.Music;
 
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
-import info.colarietitosti.supertools.backend.tools.Config.Config;
+import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverFactory;
 import info.colarietitosti.supertools.backend.tools.Music.Entity.Album;
@@ -20,7 +20,7 @@ public class MusicDownload {
     DownloadQueue downloadQueue;
 
     @Autowired
-    Config config;
+    BackendConfigutation config;
 
     @Autowired
     FirefoxDriverFactory firefoxDriverFactory;

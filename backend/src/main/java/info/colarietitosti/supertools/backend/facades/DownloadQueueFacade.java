@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.downloaderQueue;
 
-import info.colarietitosti.supertools.backend.tools.Config.Config;
+import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.Music.MusicDownload;
 import info.colarietitosti.supertools.backend.tools.Series.SeriesWorker;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Log
 @Controller
-public class DownloadQueueRest {
+public class DownloadQueueFacade {
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -32,7 +32,7 @@ public class DownloadQueueRest {
     SeriesWorker seriesWorker;
 
     @Autowired
-    Config config;
+    BackendConfigutation config;
 
     @Autowired
     MusicDownload musicDownload;

@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.util.List;
 
 @Getter @Setter
-public class DashAppsDO {
+public class DashAppsQueues {
 
     private List<DashApp> dashTv;
     private List<DashApp> dashApps;

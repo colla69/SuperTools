@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Log
 @RestController
-public class SyncPlexRest {
+public class PlexSyncFacade {
 
     @RequestMapping(value = "syncTvShows", method = RequestMethod.GET)
     @ResponseBody
@@ -14,7 +14,7 @@ public class SyncPlexRest {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                ShellExecuter.execShellCmd("/run/media/cola/Transfer/PlexContent/syncTvShows");
+                ShellExecuter.execShellCmd("/run/media/cola/NASData/PlexContent/syncTvShows");
             }
         });
         t.setDaemon(true);
@@ -22,7 +22,7 @@ public class SyncPlexRest {
         Thread t2 = new Thread(new Runnable() {
             @Override
             public void run() {
-                ShellExecuter.execShellCmd("/run/media/cola/Transfer/PlexContent/syncMusic");
+                ShellExecuter.execShellCmd("/run/media/cola/NASData/PlexContent/syncMusic");
             }
         });
         t2.setDaemon(true);

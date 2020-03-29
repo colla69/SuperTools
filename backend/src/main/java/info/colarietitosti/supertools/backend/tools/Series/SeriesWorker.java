@@ -34,9 +34,9 @@ public class SeriesWorker {
                 log.info("Starting Download Search for: ".concat(e.getName()));
                 Boolean res =
                         serieDownloaderBackend.downloadFromVidotodo(links, e) ||
+                        serieDownloaderBackend.downloadFromVidup(links, e) ||
                         serieDownloaderBackend.downloadFromVshare(links, e) ||
-                        serieDownloaderBackend.downloadFromVidoza(links, e) ||
-                        serieDownloaderBackend.downloadFromVidup(links, e);
+                        serieDownloaderBackend.downloadFromVidoza(links, e) ;
                 log.info("Search completed!");
             });
         });

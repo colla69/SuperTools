@@ -11,23 +11,23 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-public class DashAppsRest {
+public class DashAppsFacade {
 
     @Autowired
     DashAppsRepository dashAppsRepository;
 
     @RequestMapping(method = RequestMethod.GET, value="/dashApps")
     @ResponseBody
-    public DashAppsDO getAllApps() {
+    public DashAppsQueues getAllApps() {
 
-        DashAppsDO dashAppsDO = new DashAppsDO();
+        DashAppsQueues dashAppsQueues = new DashAppsQueues();
 
         List<DashApp> apps = dashAppsRepository.findAll();
-        dashAppsDO.setDashApps(apps.stream().filter(a -> a.getType().equals("app")).sorted().collect(Collectors.toList()));
-        dashAppsDO.setDashUtils(apps.stream().filter(a -> a.getType().equals("util")).sorted().collect(Collectors.toList()));
-        dashAppsDO.setDashTv(apps.stream().filter(a -> a.getType().equals("tv")).sorted().collect(Collectors.toList()));
+        dashAppsQueues.setDashApps(apps.stream().filter(a -> a.getType().equals("app")).sorted().collect(Collectors.toList()));
+        dashAppsQueues.setDashUtils(apps.stream().filter(a -> a.getType().equals("util")).sorted().collect(Collectors.toList()));
+        dashAppsQueues.setDashTv(apps.stream().filter(a -> a.getType().equals("tv")).sorted().collect(Collectors.toList()));
 
-        return dashAppsDO;
+        return dashAppsQueues;
     }
 
 }
