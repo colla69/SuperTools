@@ -1,9 +1,9 @@
 package info.colarietitosti.supertools.backend.downloaderQueue;
 
+import info.colarietitosti.supertools.backend.Music.MusicDownload;
+import info.colarietitosti.supertools.backend.Series.SeriesWorker;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
-import info.colarietitosti.supertools.backend.tools.Music.MusicDownload;
-import info.colarietitosti.supertools.backend.tools.Series.SeriesWorker;
 import info.colarietitosti.supertools.backend.tools.ShellExecuter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

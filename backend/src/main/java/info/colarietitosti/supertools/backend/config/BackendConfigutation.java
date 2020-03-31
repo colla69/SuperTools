@@ -1,8 +1,8 @@
 package info.colarietitosti.supertools.backend.config;
 
+import info.colarietitosti.supertools.backend.Series.Entity.Serie;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
-import info.colarietitosti.supertools.backend.tools.Series.Entity.Serie;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,17 @@ public class BackendConfigutation {
     public void loadSeries(){
         series.clear();
         List<SeriesConfig> seriesConfigs = seriesConfigRepository.findAll();
-        seriesConfigs.forEach(sc -> addSeries(
-                sc.getLabel(),
-                sc.getLinkpart(),
-                sc.getActive(),
-                sc.getStartSeriesNo(),
-                sc.getEndSeriesNo()
+        seriesConfigs.forEach(seriesConfig -> addSeries(
+                seriesConfig.getLabel(),
+                seriesConfig.getLinkpart(),
+                seriesConfig.getActive(),
+                seriesConfig.getStartSeriesNo(),
+                seriesConfig.getEndSeriesNo()
         ));
+    }
+
+    public String getCompleteWatchSeriesLink(String serieLinkPart){
+        return watchSeriesLink.concat("serie/").concat(serieLinkPart);
     }
 
     private void addSeries(String name, String linkpart, Boolean active, Integer startNum, Integer endNum ){
