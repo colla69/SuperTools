@@ -1,8 +1,8 @@
-package info.colarietitosti.supertools.backend.Series;
+package info.colarietitosti.supertools.backend.series;
 
-import info.colarietitosti.supertools.backend.Series.Entity.Episode;
-import info.colarietitosti.supertools.backend.Series.Entity.Serie;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.series.Entity.Episode;
+import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 @Slf4j
 @Component
@@ -136,7 +135,8 @@ public class WatchseriesSearch {
         try {
             doc = Jsoup.connect(link).get();
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
+            //e.printStackTrace();
         }
         return doc.getElementsByAttributeValue("itemprop","season");
     }
@@ -150,20 +150,24 @@ public class WatchseriesSearch {
         }
         List<String> epiLinks = Collections.synchronizedList(new ArrayList<String>());
         Elements liness = doc.select("tr");
-
-        for (String line : getPrePageLinks(liness)){
-            FirefoxDriverUtils.cleanup();
-            final FirefoxDriver driver;
+        boolean success = false;
+        List<String> list = getPrePageLinks(liness);
+        FirefoxDriver driver = null;
+        try {
+            driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (String line : list){
             try {
-                driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
                 driver.get(line);
-                if (FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 3)) continue;
+                if (FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 3, By.className("push_button"))) continue;
 
                 String epiLink = extractElementFromPage(driver);
-                FirefoxDriverUtils.killDriver(driver);
 
                 log.info("trying download from : {}", epiLink);
                 if (streamServiceDownloaderBackend.downloadLink(epiLink, episode)){
+                    success = true;
                     break;
                 }
                 epiLinks.add(epiLink);
@@ -172,7 +176,15 @@ public class WatchseriesSearch {
                 log.error("error downloading {}", e.getMessage());
                 continue;
             }
+//            try {
+//                sleep(2000);
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
         }
+        FirefoxDriverUtils.killDriver(driver);
+        FirefoxDriverUtils.cleanup();
+        if (!success) log.info("search failed :( ");
     }
 
     private String extractElementFromPage(FirefoxDriver driver) {

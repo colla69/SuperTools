@@ -1,4 +1,4 @@
-package info.colarietitosti.supertools.backend.Music.Entity;
+package info.colarietitosti.supertools.backend.music.Entity;
 
 import lombok.Getter;
 import lombok.Setter;

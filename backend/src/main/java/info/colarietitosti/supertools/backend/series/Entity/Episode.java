@@ -1,4 +1,4 @@
-package info.colarietitosti.supertools.backend.Series.Entity;
+package info.colarietitosti.supertools.backend.series.Entity;
 
 import lombok.Getter;
 import lombok.Setter;

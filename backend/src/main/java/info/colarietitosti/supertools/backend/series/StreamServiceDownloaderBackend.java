@@ -1,8 +1,8 @@
-package info.colarietitosti.supertools.backend.Series;
+package info.colarietitosti.supertools.backend.series;
 
-import info.colarietitosti.supertools.backend.Series.Entity.Episode;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
+import info.colarietitosti.supertools.backend.series.Entity.Episode;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +14,6 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -153,8 +151,8 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             driver.get(link);
-            WebDriverWait wait = new WebDriverWait(driver, 15);
-            wait.until(ExpectedConditions.elementToBeClickable(By.className("vjs-big-play-button")));
+
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.className("vjs-big-play-button"));
             WebElement el = driver.findElement(By.className("vjs-big-play-button"));
             driver.executeScript("arguments[0].click();", el);
             WebElement video = driver.findElement(By.className("vjs-tech"));
@@ -198,9 +196,8 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             driver.get(link);
-            //log.info(driver.toString());
-            WebDriverWait wait = new WebDriverWait(driver, 15);
-            wait.until(ExpectedConditions.elementToBeClickable(By.className("vjs-big-play-button")));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.className("vjs-big-play-button"));
+
             WebElement el = driver.findElement(By.className("vjs-big-play-button"));
             driver.executeScript("arguments[0].click();", el);
             WebElement video = driver.findElement(By.className("vjs-tech"));
@@ -208,15 +205,13 @@ public class StreamServiceDownloaderBackend {
             if (checkAndDownload(dlink, episode)) {
                 FirefoxDriverUtils.killDriver(driver);
                 return Boolean.TRUE;
-            } else {
-                FirefoxDriverUtils.killDriver(driver);
-                return Boolean.FALSE;
             }
         } catch (Exception e) {
-            FirefoxDriverUtils.killDriver(driver);
             e.printStackTrace();
-            return Boolean.FALSE;
+
         }
+        FirefoxDriverUtils.killDriver(driver);
+        return Boolean.FALSE;
     }
 
     private boolean checkAndDownload(String dlink, Episode episode) throws IOException {

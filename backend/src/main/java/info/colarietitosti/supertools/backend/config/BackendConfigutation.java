@@ -1,11 +1,12 @@
 package info.colarietitosti.supertools.backend.config;
 
-import info.colarietitosti.supertools.backend.Series.Entity.Serie;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
+import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +23,18 @@ public class BackendConfigutation {
     @Autowired
     SeriesConfigRepository seriesConfigRepository;
 
-    private String seriesOutPath = "/run/media/cola/NASData/PlexContent/tvshows/";
-    private String musicOutPath = "/run/media/cola/NASData/PlexContent/Music/";
-    private String watchSeriesLink = "https://www1.swatchseries.to/";
-    private String done_command = "/run/media/cola/NASData/PlexContent/syncTvShows";
+    @Value("${series.save.path}")
+    private String seriesOutPath;
+
+    @Value("${music.save.path}")
+    private String musicOutPath;
+
+    @Value("${series.watchseries.link}")
+    private String watchSeriesLink;
+
+    @Value("${series.done.path}")
+    private String done_command;
+
     private List<Serie> series = new ArrayList<>();
 
     @PostConstruct

@@ -1,8 +1,8 @@
 package info.colarietitosti.supertools.backend.downloaderQueue;
 
-import info.colarietitosti.supertools.backend.Music.MusicDownload;
-import info.colarietitosti.supertools.backend.Series.SeriesWorker;
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.music.MusicDownloader;
+import info.colarietitosti.supertools.backend.series.SeriesWorker;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.ShellExecuter;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
-public class DownloadQueueFacade {
+public class DownloaderFacade {
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -35,7 +35,7 @@ public class DownloadQueueFacade {
     BackendConfigutation config;
 
     @Autowired
-    MusicDownload musicDownload;
+    MusicDownloader musicDownloader;
 
     @GetMapping("/queues")
     @ResponseBody
@@ -77,7 +77,7 @@ public class DownloadQueueFacade {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                musicDownload.downloadAndTag(payload.get("artist"), payload.get("linkpart"));
+                musicDownloader.downloadAndTag(payload.get("artist"), payload.get("linkpart"));
             }
         });
         t.setDaemon(true);
@@ -93,7 +93,7 @@ public class DownloadQueueFacade {
             @Override
             public void run() {
                 log.info("starting tag process");
-                payload.forEach(artist -> musicDownload.tag(artist));
+                payload.forEach(artist -> musicDownloader.tag(artist));
                 log.info("music tag terminated");
             }
         });

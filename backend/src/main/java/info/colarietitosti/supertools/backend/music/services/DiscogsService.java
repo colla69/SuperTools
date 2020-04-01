@@ -1,31 +1,23 @@
-package info.colarietitosti.supertools.backend.Music;
+package info.colarietitosti.supertools.backend.music.services;
 
-import info.colarietitosti.supertools.backend.Music.Entity.Album;
-import info.colarietitosti.supertools.backend.Music.Entity.Artist;
-import info.colarietitosti.supertools.backend.Music.Entity.Track;
-import lombok.extern.slf4j.Slf4j;
+import info.colarietitosti.supertools.backend.music.Entity.Album;
+import info.colarietitosti.supertools.backend.music.Entity.Artist;
+import info.colarietitosti.supertools.backend.music.Entity.Track;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
-import static java.lang.Thread.sleep;
+@Service
+public class DiscogsService {
 
-@Slf4j
-public class MusicSearch {
-
-    private final String baseSearch = "http://slider.kz/#";
-
+    private final String baseLink = "https://www.discogs.com";
 
     public Artist searchArtist(String artist, String artistLink){
-        String baseLink = "https://www.discogs.com";
+
         Artist result = new Artist(artist, artistLink);
         Document doc = null;
         try {
@@ -60,8 +52,8 @@ public class MusicSearch {
                         //log.info("genre:"+genre);
                     } else if (
                             div.text().toLowerCase().contains("year") ||
-                            div.text().toLowerCase().contains("released")
-                        ){
+                                    div.text().toLowerCase().contains("released")
+                    ){
                         i++;
                         year = divs.get(i).text();
                         //log.info("year:"+year);
@@ -81,31 +73,5 @@ public class MusicSearch {
             //break;
         }
         return result;
-    }
-
-   public String searchSong(String sText, FirefoxDriver driver) {
-        log.info("Search started: "+sText);
-        sText = sText.replace(" ","%20");
-        String sLink = baseSearch.concat(sText);
-        try{
-            driver.get(sLink);
-            WebDriverWait wait = new WebDriverWait(driver, 10);
-            wait.until(ExpectedConditions.elementToBeClickable(By.className("stripe-odd")));
-            WebElement el = driver.findElement(By.id("liveaudio"));
-            WebElement dwn = el.findElement(By.tagName("a"));
-            String dwnLink = dwn.getAttribute("href");
-            log.info("found :"+dwnLink+"\n"+"in "+sLink);
-            sleep(500);
-            return dwnLink;
-        } catch (Exception e){
-            log.error("error finding Download Link in {}", sLink);
-            //e.printStackTrace();
-            try {
-                sleep(500);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-            return "";
-        }
     }
 }

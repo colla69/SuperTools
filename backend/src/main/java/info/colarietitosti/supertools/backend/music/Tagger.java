@@ -1,4 +1,4 @@
-package info.colarietitosti.supertools.backend.Music;
+package info.colarietitosti.supertools.backend.music;
 
 import com.mpatric.mp3agic.*;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package info.colarietitosti.supertools.backend.Series;
+package info.colarietitosti.supertools.backend.series;
 
 import java.util.Arrays;
 import java.util.HashSet;

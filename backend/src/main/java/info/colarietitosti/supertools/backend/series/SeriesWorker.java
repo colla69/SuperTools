@@ -1,7 +1,7 @@
-package info.colarietitosti.supertools.backend.Series;
+package info.colarietitosti.supertools.backend.series;
 
-import info.colarietitosti.supertools.backend.Series.Entity.Serie;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
+import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

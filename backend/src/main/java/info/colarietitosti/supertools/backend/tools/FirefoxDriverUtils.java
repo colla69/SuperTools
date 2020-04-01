@@ -29,10 +29,10 @@ public class FirefoxDriverUtils {
         }
     }
 
-    public static boolean tryWaitingForPageToLoad(FirefoxDriver driver, long timeOutInSeconds) {
+    public static boolean tryWaitingForPageToLoad(FirefoxDriver driver, long timeOutInSeconds, By expectedConditions) {
         try {
             WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
-            wait.until(ExpectedConditions.elementToBeClickable(By.className("push_button")));
+            wait.until(ExpectedConditions.elementToBeClickable(expectedConditions));
         } catch (TimeoutException e) {
             killDriver(driver);
             return true;
