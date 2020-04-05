@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MusicSearchService {
 
-
     DiscogsService discogsService = new DiscogsService();
     SliderKzService sliderKzService = new SliderKzService();
 
