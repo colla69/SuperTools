@@ -117,14 +117,20 @@ public class WatchseriesSearch {
     }
 
     private List<Episode> loadSingleEpisodeLinks(Serie serie, Elements table) {
-        Elements serieTablePart = table
+        List<Elements> seriesTables = table
                 .stream()
                 .filter(serieBlock -> {
                     Integer blockSerieNumber = Integer.parseInt(serieBlock.text().substring(7,9).trim());
                     return serie.isSerieNumber(blockSerieNumber);
                 })
                 .map(serieBlock -> serieBlock.select("li"))
-                .collect(Collectors.toList()).get(0);
+                .collect(Collectors.toList());
+
+        Elements serieTablePart = new Elements();
+        if (!seriesTables.isEmpty()){
+            serieTablePart = seriesTables.get(0);
+        }
+
         return serieTablePart.stream()
                 .map(episodeLine -> extractEpisodeFromEpisodeLine(episodeLine, serie))
                 .collect(Collectors.toList());
