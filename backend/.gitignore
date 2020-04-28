@@ -28,4 +28,8 @@ target/
 build/
 
 ### VS Code ###
-.vscode/
+.vscode
+/src/main/resources/application.properties
+/src/main/resources/selfsign.crt
+/src/main/resources/ssl-server.jks
+/src/main/webapp/WEB-INF/classes/
