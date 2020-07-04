@@ -10,7 +10,7 @@ import java.util.List;
 public class Serie {
 
     private Integer no;
-    private List<Episode> epis = new ArrayList<>();
+    private List<Episode> epis;
     private String link;
     private String name;
     private Boolean active;
@@ -18,12 +18,11 @@ public class Serie {
 
     public Serie(Integer no, String link, String name, Boolean active) {
         this.no = no;
-        this.epis = epis;
+        this.epis = new ArrayList<>();
         this.link = link;
         this.name = name;
         this.active = active;
     }
-
     public boolean isSerieNumber(Integer seriesNo){
         return seriesNo.equals(no);
     }
