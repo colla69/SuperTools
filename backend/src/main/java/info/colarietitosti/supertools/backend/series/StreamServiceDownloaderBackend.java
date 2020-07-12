@@ -48,7 +48,8 @@ public class StreamServiceDownloaderBackend {
         if (link.contains(WatchseriesConstants.VSHARE)) {
             return downloadFromVshare(link, episode);
         }
-        if (link.contains(WatchseriesConstants.VIDLOX)) {
+        if (link.contains(WatchseriesConstants.VIDLOX) ||
+            link.contains(WatchseriesConstants.VIDEOBIN)) {
             return downloadFromSimpleBlobSource(episode, link);
         }
         return false;
@@ -100,17 +101,16 @@ public class StreamServiceDownloaderBackend {
         try {
             driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
         } catch (Exception e) {
-            e.printStackTrace();
             return Boolean.FALSE;
         }
         Document doc = null;
         try {
             driver.get(link);
 
-            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.className("vjs-big-play-button"));
-            WebElement el = driver.findElement(By.className("vjs-big-play-button"));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color") );
+            WebElement el = driver.findElement(By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color"));
             driver.executeScript("arguments[0].click();", el);
-            WebElement video = driver.findElement(By.className("vjs-tech"));
+            WebElement video = driver.findElement(By.className("jw-video"));
             String dlink = video.getAttribute("src");
             if (checkAndDownload(dlink, episode, false)) {
                 FirefoxDriverUtils.killDriver(driver);
@@ -120,7 +120,7 @@ public class StreamServiceDownloaderBackend {
                 return Boolean.FALSE;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             FirefoxDriverUtils.killDriver(driver);
             return Boolean.FALSE;
         }
