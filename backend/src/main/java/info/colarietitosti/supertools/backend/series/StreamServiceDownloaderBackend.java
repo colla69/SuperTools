@@ -35,6 +35,17 @@ public class StreamServiceDownloaderBackend {
     @Autowired
     BackendConfigutation config;
 
+    private final Integer WAIT_TIMEOUT = 10;
+
+    private final String REQUEST_HEAD = "HEAD";
+    private final String SOURCE = "source";
+    private final String SRC = "src";
+    private final String M3U8_EXT = ".m3u8";
+    private final String CENTER = "center";
+    private final String CSS_JW_BUTTON_COLOR = "div.jw-icon.jw-icon-display.jw-button-color";
+    private final String CSS_JW_VIDEO = "jw_video";
+    private final String JS_BUTTON_CLICK = "arguments[0].click();";
+
     public Boolean downloadLink(String link, Episode episode) {
         if (link.contains(WatchseriesConstants.VIDTODO)) {
             return downloadFromVidotodo(episode, link);
@@ -59,11 +70,11 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             doc = Jsoup.connect(link).get();
-            Element button = doc.getElementsByClass("center").get(0);
+            Element button = doc.getElementsByClass(CENTER).get(0);
             FormElement form = (FormElement) button;
             Document videopage = form.submit().execute().parse();
-            Element source = videopage.selectFirst("source");
-            String dlink = source.attr("src");
+            Element source = videopage.selectFirst(SOURCE);
+            String dlink = source.attr(SRC);
             if (checkAndDownload(dlink, episode,false)) {
                 return Boolean.TRUE;
             } else {
@@ -79,9 +90,9 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             doc = Jsoup.connect(link).get();
-            Elements d_link = doc.select("source");
+            Elements d_link = doc.select(SOURCE);
             try {
-                String dlink = d_link.get(0).attr("src");
+                String dlink = d_link.get(0).attr(SRC);
                 if (checkAndDownload(dlink, episode, false)) {
                     return Boolean.TRUE;
                 } else {
@@ -107,10 +118,10 @@ public class StreamServiceDownloaderBackend {
         try {
             driver.get(link);
 
-            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color") );
-            WebElement el = driver.findElement(By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color"));
-            driver.executeScript("arguments[0].click();", el);
-            WebElement video = driver.findElement(By.className("jw-video"));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, WAIT_TIMEOUT, By.cssSelector(CSS_JW_BUTTON_COLOR) );
+            WebElement el = driver.findElement(By.cssSelector(CSS_JW_BUTTON_COLOR));
+            driver.executeScript(JS_BUTTON_CLICK, el);
+            WebElement video = driver.findElement(By.className(CSS_JW_VIDEO));
             String dlink = video.getAttribute("src");
             if (checkAndDownload(dlink, episode, false)) {
                 FirefoxDriverUtils.killDriver(driver);
@@ -137,12 +148,12 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             driver.get(link);
-            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.className("vjs-big-play-button"));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, WAIT_TIMEOUT, By.className("vjs-big-play-button"));
 
             WebElement el = driver.findElement(By.className("vjs-big-play-button"));
-            driver.executeScript("arguments[0].click();", el);
+            driver.executeScript(JS_BUTTON_CLICK, el);
             WebElement video = driver.findElement(By.className("vjs-tech"));
-            String dlink = video.getAttribute("src");
+            String dlink = video.getAttribute(SRC);
             if (checkAndDownload(dlink, episode, false)) {
                 FirefoxDriverUtils.killDriver(driver);
                 return Boolean.TRUE;
@@ -170,7 +181,7 @@ public class StreamServiceDownloaderBackend {
     }
 
     private String extractM38uLinkFromHtmlpage(Document doc) {
-        Integer plausibleStartIndex = doc.toString().indexOf(".m38u")-500;
+        Integer plausibleStartIndex = doc.toString().indexOf(M3U8_EXT)-500;
 
         Pattern pattern = Pattern.compile("https://.*.m3u8");
         Matcher matcher = pattern.matcher(doc.toString());
@@ -190,7 +201,7 @@ public class StreamServiceDownloaderBackend {
 
     private boolean checkAndDownload(String dlink, Episode episode, Boolean playlist) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(dlink).openConnection();
-        connection.setRequestMethod("HEAD");
+        connection.setRequestMethod(REQUEST_HEAD);
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
             log.debug("\tadding to Download Queue: ".concat(dlink));
