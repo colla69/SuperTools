@@ -13,12 +13,12 @@ import java.net.URL;
 @Getter
 public class FileDownloader implements Runnable {
 
-    private String link;
-    private String savePath;
-    private String title;
-    private boolean running;
-    private boolean done;
-    private String doneCmd = "";
+    protected String link;
+    protected String savePath;
+    protected String title;
+    protected boolean running;
+    protected boolean done;
+    protected String doneCmd = "";
 
     public FileDownloader(String link, String savePath, String title, String doneCmd) {
         this.link = link;
@@ -29,7 +29,7 @@ public class FileDownloader implements Runnable {
 
     public void download(String link, String savePath, String title){
         new File(savePath).mkdirs();
-        String path = savePath.concat(title.replace("/",""));
+        String path = makePath();
 
         try (BufferedInputStream in = new BufferedInputStream(new URL(link).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(path))
@@ -40,16 +40,24 @@ public class FileDownloader implements Runnable {
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
-            if (!this.doneCmd.equals("")) {
-                ShellExecuter.execShellCmd(this.doneCmd);
-                log.info("done!".concat(this.doneCmd));
-            }
-            this.running = false;
-            this.done = true;
-            log.info("done!");
+            executeDoneCmd();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("\n!!!!downloaderror", e);
         }
+    }
+
+    private String makePath() {
+        return this.savePath.concat(this.title.replace("/",""));
+    }
+
+    protected void executeDoneCmd() {
+        if (!this.doneCmd.equals("")) {
+            ShellExecuter.execShellCmd(this.doneCmd);
+            log.info("done!".concat(this.doneCmd));
+        }
+        this.running = false;
+        this.done = true;
+        log.info("done!");
     }
 
     @Override

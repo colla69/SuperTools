@@ -5,6 +5,7 @@ import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.series.Entity.Episode;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverUtils;
+import info.colarietitosti.supertools.backend.tools.VideoPlaylistDownloader;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -21,9 +22,8 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Component
@@ -48,21 +48,11 @@ public class StreamServiceDownloaderBackend {
         if (link.contains(WatchseriesConstants.VSHARE)) {
             return downloadFromVshare(link, episode);
         }
-        return false;
-    }
-
-    public Boolean downloadFromVshare(List<String> watchLinks, Episode episode) {
-        log.debug("\tStarting vshare search...");
-        watchLinks = filterLinksByName(watchLinks, "vshare.eu");
-        for (String link : watchLinks) {
-            if (downloadFromVshare(link, episode)) {
-                break;
-            } else {
-                continue;
-            }
+        if (link.contains(WatchseriesConstants.VIDLOX) ||
+            link.contains(WatchseriesConstants.VIDEOBIN)) {
+            return downloadFromSimpleBlobSource(episode, link);
         }
-        log.debug("\tNothing to download from vshare");
-        return Boolean.FALSE;
+        return false;
     }
 
     private Boolean downloadFromVshare(String link, Episode episode) {
@@ -74,7 +64,7 @@ public class StreamServiceDownloaderBackend {
             Document videopage = form.submit().execute().parse();
             Element source = videopage.selectFirst("source");
             String dlink = source.attr("src");
-            if (StreamServiceDownloaderBackend.this.downloadFromVshare(episode, dlink)) {
+            if (checkAndDownload(dlink, episode,false)) {
                 return Boolean.TRUE;
             } else {
                 return Boolean.FALSE;
@@ -85,21 +75,6 @@ public class StreamServiceDownloaderBackend {
         }
     }
 
-    private boolean downloadFromVshare(Episode episode, String dlink) throws IOException {
-        return checkAndDownload(dlink, episode);
-    }
-
-    public Boolean downloadFromVidoza(List<String> watchLinks, Episode episode) {
-        log.debug("\tStarting vidoza search...");
-        watchLinks = filterLinksByName(watchLinks, "vidoza.net");
-        for (String link : watchLinks) {
-            Boolean x = downloadFromVidoza(link, episode);
-            if (x != null) return x;
-        }
-        log.debug("\tNothing to download from vidoza");
-        return Boolean.FALSE;
-    }
-
     private Boolean downloadFromVidoza(String link, Episode episode) {
         Document doc = null;
         try {
@@ -107,7 +82,11 @@ public class StreamServiceDownloaderBackend {
             Elements d_link = doc.select("source");
             try {
                 String dlink = d_link.get(0).attr("src");
-                return downloadFromVidoza(episode, dlink);
+                if (checkAndDownload(dlink, episode, false)) {
+                    return Boolean.TRUE;
+                } else {
+                    return Boolean.FALSE;
+                }
             } catch (MalformedURLException | IndexOutOfBoundsException ex) {
                 ex.printStackTrace();
             }
@@ -117,47 +96,23 @@ public class StreamServiceDownloaderBackend {
         return null;
     }
 
-    private Boolean downloadFromVidoza(Episode episode, String dlink) throws IOException {
-        if (checkAndDownload(dlink, episode)) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
-    }
-
-    public Boolean downloadFromVidotodo(List<String> watchLinks, Episode episode) {
-        log.debug("\tStarting vidtodo search...");
-        watchLinks = filterLinksByName(watchLinks, "vidtodo.com");
-
-        for (String link : watchLinks) {
-            if (downloadFromVidotodo(episode, link)) {
-                break;
-            } else {
-                continue;
-            }
-        }
-        log.debug("\tNothing to download from vidtodo");
-        return Boolean.FALSE;
-    }
-
     private Boolean downloadFromVidotodo(Episode episode, String link) {
         FirefoxDriver driver = null;
         try {
             driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
         } catch (Exception e) {
-            e.printStackTrace();
             return Boolean.FALSE;
         }
         Document doc = null;
         try {
             driver.get(link);
 
-            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.className("vjs-big-play-button"));
-            WebElement el = driver.findElement(By.className("vjs-big-play-button"));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 15, By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color") );
+            WebElement el = driver.findElement(By.cssSelector("div.jw-icon.jw-icon-display.jw-button-color"));
             driver.executeScript("arguments[0].click();", el);
-            WebElement video = driver.findElement(By.className("vjs-tech"));
+            WebElement video = driver.findElement(By.className("jw-video"));
             String dlink = video.getAttribute("src");
-            if (checkAndDownload(dlink, episode)) {
+            if (checkAndDownload(dlink, episode, false)) {
                 FirefoxDriverUtils.killDriver(driver);
                 return Boolean.TRUE;
             } else {
@@ -165,24 +120,10 @@ public class StreamServiceDownloaderBackend {
                 return Boolean.FALSE;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
             FirefoxDriverUtils.killDriver(driver);
             return Boolean.FALSE;
         }
-    }
-
-    public Boolean downloadFromVidup(List<String> watchLinks, Episode episode) {
-        log.debug("\tStarting vidup search...");
-        watchLinks = filterLinksByName(watchLinks, "vidup.io");
-        for (String link : watchLinks) {
-            if (downloadFromVidup(episode, link)) {
-                break;
-            } else {
-                continue;
-            }
-        }
-        log.debug("\tNothing to download from vidup");
-        return Boolean.FALSE;
     }
 
     private Boolean downloadFromVidup(Episode episode, String link) {
@@ -202,7 +143,7 @@ public class StreamServiceDownloaderBackend {
             driver.executeScript("arguments[0].click();", el);
             WebElement video = driver.findElement(By.className("vjs-tech"));
             String dlink = video.getAttribute("src");
-            if (checkAndDownload(dlink, episode)) {
+            if (checkAndDownload(dlink, episode, false)) {
                 FirefoxDriverUtils.killDriver(driver);
                 return Boolean.TRUE;
             }
@@ -214,30 +155,69 @@ public class StreamServiceDownloaderBackend {
         return Boolean.FALSE;
     }
 
-    private boolean checkAndDownload(String dlink, Episode episode) throws IOException {
+    private Boolean downloadFromSimpleBlobSource(Episode episode, String link){
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(link).get();
+            String dlink = extractM38uLinkFromHtmlpage(doc);
+            if (checkAndDownload(dlink, episode, true)) {
+                return Boolean.TRUE;
+            }
+        } catch (IOException e) {
+            log.error("this should not happen ", e);
+        }
+        return Boolean.FALSE;
+    }
+
+    private String extractM38uLinkFromHtmlpage(Document doc) {
+        Integer plausibleStartIndex = doc.toString().indexOf(".m38u")-500;
+
+        Pattern pattern = Pattern.compile("https://.*.m3u8");
+        Matcher matcher = pattern.matcher(doc.toString());
+
+        if (matcher.find()){
+            return matcher.group(0);
+        } else {
+            pattern = Pattern.compile("https://.*.m3u8");
+            matcher = pattern.matcher(doc.toString());
+
+            if (matcher.find(plausibleStartIndex)){
+                return matcher.group(0);
+            }
+        }
+        return "";
+    }
+
+    private boolean checkAndDownload(String dlink, Episode episode, Boolean playlist) throws IOException {
         HttpURLConnection connection = (HttpURLConnection) new URL(dlink).openConnection();
         connection.setRequestMethod("HEAD");
         int responseCode = connection.getResponseCode();
         if (responseCode == 200) {
             log.debug("\tadding to Download Queue: ".concat(dlink));
-            String donePath = config.getSeriesOutPath().concat("done/").concat(episode.getNameWithFileExt());
-            String savePath = config.getSeriesOutPath()
-                    .concat(episode.getSerie().getName()).concat("/s")
-                    .concat(episode.getSerie().getNo().toString()).concat("/");
-            downloadQueue.put(new FileDownloader(dlink, savePath, episode.getNameWithFileExt(), "touch \"".concat(donePath).concat("\"")));
+            String savePath = makeSavePath(episode);
+            String touchCmd = makeTouchCmd(episode);
+            if (playlist){
+                downloadQueue.put(new VideoPlaylistDownloader(dlink, savePath, episode.getNameWithFileExt(), touchCmd));
+            } else {
+                downloadQueue.put(new FileDownloader(dlink, savePath, episode.getNameWithFileExt(), touchCmd));
+            }
             return true;
         }
         return false;
     }
 
-    private List<String> filterLinksByName(List<String> watchLinks, String s) {
+    private String makeTouchCmd(Episode episode){
+        String donePath = makeDonePath(episode);
+        return  "touch \"".concat(donePath).concat("\"");
+    }
 
-        try {
-            watchLinks = watchLinks.parallelStream().filter(link -> link.contains(s)).collect(Collectors.toList());
-            return watchLinks;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+    private String makeDonePath(Episode episode) {
+        return  config.getSeriesOutPath().concat("done/").concat(episode.getNameWithFileExt());
+    }
+
+    private String makeSavePath(Episode episode) {
+        return config.getSeriesOutPath()
+                .concat(episode.getSerie().getName()).concat("/s")
+                .concat(episode.getSerie().getNo().toString()).concat("/");
     }
 }
