@@ -42,7 +42,7 @@ public class StreamServiceDownloaderBackend {
     private final String SRC = "src";
     private final String M3U8_EXT = ".m3u8";
     private final String CENTER = "center";
-    private final String CSS_JW_BUTTON_COLOR = "div.jw-icon.jw-icon-display.jw-button-color";
+    private final String CSS_JW_BUTTON_COLOR = "div.jw-icon-display.jw-button-color.jw-reset";
     private final String CSS_JW_VIDEO = "jw_video";
     private final String JS_BUTTON_CLICK = "arguments[0].click();";
 
@@ -148,9 +148,9 @@ public class StreamServiceDownloaderBackend {
         Document doc = null;
         try {
             driver.get(link);
-            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, WAIT_TIMEOUT, By.className("vjs-big-play-button"));
+            FirefoxDriverUtils.tryWaitingForPageToLoad(driver, WAIT_TIMEOUT, By.className("vjs-button-icon"));
 
-            WebElement el = driver.findElement(By.className("vjs-big-play-button"));
+            WebElement el = driver.findElement(By.className("vjs-button-icon"));
             driver.executeScript(JS_BUTTON_CLICK, el);
             WebElement video = driver.findElement(By.className("vjs-tech"));
             String dlink = video.getAttribute(SRC);

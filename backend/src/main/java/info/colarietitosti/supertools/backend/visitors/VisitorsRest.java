@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,56 +17,44 @@ import java.util.stream.Collectors;
 @Controller
 public class VisitorsRest {
 
+    public static final String MY_IPS_API = "https://admin.colarietitosti.info/ips/IpLog";
+    public static final String VISITORS_API = "https://cv.colarietitosti.info/visitors";
+
     @GetMapping("/visitors")
     @ResponseBody
     public List<VisitorIps> getAllApps() {
-        List<VisitorIps> result = null;
-        URL url = null;
         try {
             Set<VisitorIps> visitorIps = getVisitorIps();
             Set<MyIps> myIps = getMyIps();
             List<String> myKnownIps = myIps.parallelStream().map(MyIps::getIp).collect(Collectors.toList());
-            result = visitorIps.parallelStream()
-                    .filter(v -> !v.getIp_addr().startsWith("66.249"))
-                    .filter(v -> !v.getIp_addr().isEmpty())
-                    .filter(v -> !myKnownIps.contains(v.getIp_addr()))
-                    .sorted(new Comparator<VisitorIps>() {
-                        @Override
-                        public int compare(VisitorIps o1, VisitorIps o2) {
-                            //time asc
-                            return o2.getTimestamp().compareTo(o1.getTimestamp());
-                        }
-                    })
-                    .collect(Collectors.toList());
+
+            return filterOutKnownIps(visitorIps, myKnownIps);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("could not get visitors list",e);
         }
-        return result;
+        return null;
+    }
+
+    private List<VisitorIps> filterOutKnownIps(Set<VisitorIps> visitorIps, List<String> myKnownIps) {
+        return visitorIps.parallelStream()
+                .filter(v -> !v.getIp_addr().startsWith("66.249"))
+                .filter(v -> !v.getIp_addr().isEmpty())
+                .filter(v -> !myKnownIps.contains(v.getIp_addr()))
+                .sorted((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()))
+                .collect(Collectors.toList());
     }
 
     private Set<VisitorIps> getVisitorIps() throws IOException {
-        URL url;
-        url = new URL("https://cv.colarietitosti.info/visitors");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.connect();
-        String content = con.getContent().toString();
-        con.disconnect();
-
+        URL url = new URL(VISITORS_API);
         ObjectMapper mapper = new ObjectMapper();
+
         return mapper.readValue(url, new TypeReference<Set<VisitorIps>>() {});
     }
 
     private Set<MyIps> getMyIps() throws IOException {
-        URL url;
-        url = new URL("https://admin.colarietitosti.info/ips/IpLog");
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.connect();
-        String content = con.getContent().toString();
-        con.disconnect();
-
+        URL url = new URL(MY_IPS_API);
         ObjectMapper mapper = new ObjectMapper();
+
         return mapper.readValue(url, new TypeReference<Set<MyIps>>() {});
     }
 }

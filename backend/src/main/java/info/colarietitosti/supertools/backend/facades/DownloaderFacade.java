@@ -7,6 +7,7 @@ import info.colarietitosti.supertools.backend.tools.FileDownloader;
 import info.colarietitosti.supertools.backend.tools.ShellExecuter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 public class DownloaderFacade {
+
+    public static final String ALBUM = "album";
+    public static final String ARTIST = "artist";
+    public static final String LINKPART = "linkpart";
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -51,14 +56,14 @@ public class DownloaderFacade {
     }
 
     @GetMapping("/clearQueue")
-    public String clearQueue(){
+    public HttpStatus clearQueue(){
         downloadQueue.clearDone();
-        return String.valueOf(200);
+        return HttpStatus.OK;
     }
 
     @PostMapping("/startDownloads")
     @ResponseBody
-    public String startUpdate(){
+    public HttpStatus startUpdate(){
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -67,39 +72,46 @@ public class DownloaderFacade {
         });
         t.setDaemon(true);
         t.start();
-        return String.valueOf(200);
+        return HttpStatus.OK;
     }
 
-    @PostMapping(value = "/startMusicDownloads", consumes = "application/json")
+    @PostMapping(value = "/startArtistDownload", consumes = "application/json")
     @ResponseBody
-    public String startMusicDownloads(@RequestBody Map<String, String> payload){
-        System.out.println(payload);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                musicDownloader.downloadAndTag(payload.get("artist"), payload.get("linkpart"));
-            }
-        });
+    public HttpStatus startArtistDownload(@RequestBody Map<String, String> payload){
+        Thread t = new Thread(() -> musicDownloader.downloadArtistAndTag(
+                payload.get(ARTIST),
+                payload.get(LINKPART)
+        ));
         t.setDaemon(true);
         t.start();
-        return String.valueOf(200);
+        return HttpStatus.OK;
+    }
+
+    @PostMapping(value = "/startAlbumDownload", consumes = "application/json")
+    @ResponseBody
+    public HttpStatus startAlbumDownload(@RequestBody Map<String, String> payload){
+        Thread t = new Thread(() -> musicDownloader.downloadAlbumAndTag(
+                payload.get(ARTIST),
+                payload.get(ALBUM),
+                payload.get(LINKPART)
+        ));
+        t.setDaemon(true);
+        t.start();
+        return HttpStatus.OK;
     }
 
     @PostMapping(value = "/startMusicTag", consumes = "application/json")
     @ResponseBody
-    public String startMusicTags(@RequestBody List<String> payload){
+    public HttpStatus startMusicTags(@RequestBody List<String> payload){
         System.out.println(payload);
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                log.info("starting tag process");
-                payload.forEach(artist -> musicDownloader.tag(artist));
-                log.info("music tag terminated");
-            }
+        Thread t = new Thread(() -> {
+            log.info("starting tag process");
+            payload.forEach(artist -> musicDownloader.tag(artist));
+            log.info("music tag terminated");
         });
         t.setDaemon(true);
         t.start();
-        return String.valueOf(200);
+        return HttpStatus.OK;
     }
 
     @GetMapping(value = "/downloadedArtists")
@@ -118,5 +130,4 @@ public class DownloaderFacade {
         }
         return artists;
     }
-
 }

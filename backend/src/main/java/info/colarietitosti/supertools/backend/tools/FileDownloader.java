@@ -29,24 +29,29 @@ public class FileDownloader implements Runnable {
 
     public void download(String link, String savePath, String title){
         new File(savePath).mkdirs();
-        String path = makePath();
+        String newFilePath = makeSavePath();
 
         try (BufferedInputStream in = new BufferedInputStream(new URL(link).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(path))
+             FileOutputStream fileOutputStream = new FileOutputStream(newFilePath))
         {
-            log.info("starting download: "+path);
-            byte dataBuffer[] = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                fileOutputStream.write(dataBuffer, 0, bytesRead);
-            }
+            executeDownload(newFilePath, in, fileOutputStream);
             executeDoneCmd();
         } catch (IOException e) {
             log.error("\n!!!!downloaderror", e);
         }
     }
 
-    private String makePath() {
+    private void executeDownload(String newFilePath, BufferedInputStream in, FileOutputStream fileOutputStream)
+            throws IOException {
+        log.info("starting download: "+newFilePath);
+        byte dataBuffer[] = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+            fileOutputStream.write(dataBuffer, 0, bytesRead);
+        }
+    }
+
+    private String makeSavePath() {
         return this.savePath.concat(this.title.replace("/",""));
     }
 

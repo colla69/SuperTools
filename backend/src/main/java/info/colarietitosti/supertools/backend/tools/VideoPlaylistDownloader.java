@@ -13,14 +13,24 @@ public class VideoPlaylistDownloader extends FileDownloader {
     }
 
     @Override
-    public void download(String link, String savePath, String title){
+    public void download(String link, String savePath, String title) {
+
         new File(savePath).mkdirs();
-        String path = savePath.concat(title.replace("/",""));
-        String cmd = "ffmpeg -i \""+link+"\" -c copy -y "+path+".mp4";
-        log.info(cmd);
+        String newFilePath = makeSavePath(savePath, title);
 
         ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.command("ffmpeg", "-i", link, "-c", "copy", "-loglevel", "quiet", "-y",path+".mp4");
+        processBuilder.command("ffmpeg", "-i", link, "-c", "copy", "-loglevel", "quiet", "-y", newFilePath+".mp4");
+
+        executeDownload(processBuilder);
+
+        executeDoneCmd();
+    }
+
+    private String makeSavePath(String savePath, String title) {
+        return savePath.concat(title.replace("/",""));
+    }
+
+    private void executeDownload(ProcessBuilder processBuilder) {
         Process process = null;
         try {
             process = processBuilder.start();
@@ -32,7 +42,6 @@ public class VideoPlaylistDownloader extends FileDownloader {
         } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
-        executeDoneCmd();
     }
 
     @Override

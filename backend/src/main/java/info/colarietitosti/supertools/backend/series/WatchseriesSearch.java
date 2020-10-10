@@ -152,7 +152,7 @@ public class WatchseriesSearch {
         try {
             doc = Jsoup.connect(episode.getLink()).get();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         List<String> epiLinks = Collections.synchronizedList(new ArrayList<String>());
         Elements liness = doc.select("tr");
@@ -162,7 +162,7 @@ public class WatchseriesSearch {
         try {
             driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         for (String line : list){
             try {

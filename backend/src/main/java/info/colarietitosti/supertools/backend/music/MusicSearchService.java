@@ -1,5 +1,6 @@
 package info.colarietitosti.supertools.backend.music;
 
+import info.colarietitosti.supertools.backend.music.Entity.Album;
 import info.colarietitosti.supertools.backend.music.Entity.Artist;
 import info.colarietitosti.supertools.backend.music.services.DiscogsService;
 import info.colarietitosti.supertools.backend.music.services.SliderKzService;
@@ -14,6 +15,10 @@ public class MusicSearchService {
 
     public Artist searchArtist(String artist, String artistLink){
         return discogsService.searchArtist(artist, artistLink);
+    }
+
+    public Album searchAlbum(Album album, String artistLink){
+        return discogsService.searchAlbum(album, artistLink);
     }
 
    public String searchSong(String sText, FirefoxDriver driver) {

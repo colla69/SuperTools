@@ -14,9 +14,9 @@ public class WatchseriesConstants {
     public static final String VIDEOBIN = "videobin";
 
     public static final Set<String> allowedStreamServices = new HashSet<>(Arrays.asList(
-            //VIDOZA,
+            VIDOZA,
             VIDTODO,
-            //VIDUP,
+            VIDUP,
             //VSHARE,
             VIDLOX,
             VIDEOBIN
