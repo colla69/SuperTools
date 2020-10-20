@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@TrackTime
 @Slf4j
 @Getter
 @Component
@@ -28,6 +27,7 @@ public class SeriesWorker {
     private boolean running;
     private List<Serie> series = null;
 
+    @TrackTime
     public void updateSeries() {
         startRunning();
         series = watchseriesSearch.searchSeriesForDownload();

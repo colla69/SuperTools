@@ -12,13 +12,25 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfilerAspect {
 
-    @Pointcut("within(@info.colarietitosti.supertools.backend.config.profiling.TrackTime *)")
+    @Pointcut("@annotation(info.colarietitosti.supertools.backend.config.profiling.TrackTime)")
     public void profile() {
+    }
+
+    @Pointcut("within(@info.colarietitosti.supertools.backend.config.profiling.TrackTime *)")
+    public void profileClass() {
     }
 
     @Around("profile()")
     public Object auditMethod(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        return logPerformance(thisJoinPoint);
+    }
 
+    @Around("profileClass()")
+    public Object auditClass(ProceedingJoinPoint thisJoinPoint) throws Throwable {
+        return logPerformance(thisJoinPoint);
+    }
+
+    private Object logPerformance(ProceedingJoinPoint thisJoinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object obj = thisJoinPoint.proceed();
         long timeTaken = System.currentTimeMillis() - startTime;
