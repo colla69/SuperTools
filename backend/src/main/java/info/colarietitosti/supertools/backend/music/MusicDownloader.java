@@ -1,7 +1,7 @@
 package info.colarietitosti.supertools.backend.music;
 
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
-import info.colarietitosti.supertools.backend.config.profiling.TrackTime;
+import info.colarietitosti.supertools.backend.config.profiling.Profiled;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.music.Entity.Album;
 import info.colarietitosti.supertools.backend.music.Entity.Artist;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Thread.sleep;
 
-@TrackTime
 @Slf4j
+@Profiled
 @Component
 public class MusicDownloader {
 

@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.series;
 
-import info.colarietitosti.supertools.backend.config.profiling.TrackTime;
+import info.colarietitosti.supertools.backend.config.profiling.Profiled;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class SeriesWorker {
     private boolean running;
     private List<Serie> series = null;
 
-    @TrackTime
+    @Profiled
     public void updateSeries() {
         startRunning();
         series = watchseriesSearch.searchSeriesForDownload();

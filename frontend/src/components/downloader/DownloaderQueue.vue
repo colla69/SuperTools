@@ -95,7 +95,7 @@
         },
         async mounted(){
             this.refresh();
-            setInterval(this.refresh, 5000);
+            setInterval(this.refresh, 1000);
         },
     }
 </script>

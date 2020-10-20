@@ -2,6 +2,7 @@ package info.colarietitosti.supertools.backend.visitors;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import info.colarietitosti.supertools.backend.config.profiling.Profiled;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Profiled
 @Controller
 public class VisitorsRest {
 

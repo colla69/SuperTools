@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfilerAspect {
 
-    @Pointcut("@annotation(info.colarietitosti.supertools.backend.config.profiling.TrackTime)")
+    @Pointcut("@annotation(info.colarietitosti.supertools.backend.config.profiling.Profiled)")
     public void profile() {
     }
 
-    @Pointcut("within(@info.colarietitosti.supertools.backend.config.profiling.TrackTime *)")
+    @Pointcut("within(@info.colarietitosti.supertools.backend.config.profiling.Profiled *)")
     public void profileClass() {
     }
 
