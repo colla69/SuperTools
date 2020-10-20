@@ -30,7 +30,6 @@
                 <v-expansion-panel-content >
                     <v-layout id="musicpanel">
                         <MusicDownloader class="elevation-5" ></MusicDownloader>
-                        <MusicTagger class="elevation-5" ></MusicTagger>
                     </v-layout>
                 </v-expansion-panel-content>
             </v-expansion-panel>
@@ -47,7 +46,6 @@
     import axios from 'axios';
     import Downloader from "./Downloader";
     import MusicDownloader from "./MusicDownloader";
-    import MusicTagger from "./MusicTagger";
     import SeriesConfigurator from "./SeriesConfigurator";
 
     export default {
@@ -66,7 +64,6 @@
         components: {
             Downloader,
             MusicDownloader,
-            MusicTagger,
             SeriesConfigurator
         },
         methods: {
@@ -104,10 +101,6 @@
 </script>
 
 <style scoped>
-    #musicpanel{
-        display: grid;
-        grid-template-columns: auto;
-    }
     #music{
         padding-left: 10px;
         padding-right: 10px;

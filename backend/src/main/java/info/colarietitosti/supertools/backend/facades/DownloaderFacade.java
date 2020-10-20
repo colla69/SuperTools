@@ -29,6 +29,7 @@ public class DownloaderFacade {
     public static final String ALBUM = "album";
     public static final String ARTIST = "artist";
     public static final String LINKPART = "linkpart";
+    public static final String TITLE = "title";
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -94,6 +95,19 @@ public class DownloaderFacade {
                 payload.get(ARTIST),
                 payload.get(ALBUM),
                 payload.get(LINKPART)
+        ));
+        t.setDaemon(true);
+        t.start();
+        return HttpStatus.OK;
+    }
+
+    @PostMapping(value = "/startTrackDownload", consumes = "application/json")
+    @ResponseBody
+    public HttpStatus startSingleTrackDownload(@RequestBody Map<String, String> payload){
+        Thread t = new Thread(() -> musicDownloader.downloadSingleTrackAndTag(
+                payload.get(ARTIST),
+                payload.get(ALBUM),
+                payload.get(TITLE)
         ));
         t.setDaemon(true);
         t.start();

@@ -43,6 +43,14 @@ public class MusicDownloader {
         tag(artist);
     }
 
+    public void downloadSingleTrackAndTag(String artist, String album, String title){
+        log.info("starting music download");
+        downloadSingleTrack(artist, album, title);
+        log.info("music download terminated");
+
+        tag(artist);
+    }
+
     public void tag(String artist) {
         log.info("starting tag process");
         Tagger tagger = new Tagger();
@@ -60,9 +68,10 @@ public class MusicDownloader {
             waitForDownloadsToFinish();
         }
     }
+
     public void downloadAlbumFromLink(String artistName, String albumName, String linkPart) {
         log.info("searching album {}", albumName);
-        Album album = new Album(albumName, linkPart,"","");
+        Album album = new Album(albumName, linkPart, "", "");
         musicSearchService.searchAlbum(album, linkPart);
         log.info("done!\n");
 
@@ -109,5 +118,17 @@ public class MusicDownloader {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void downloadSingleTrack(String artist, String album, String title) {
+        if (album.isEmpty()){
+            album = "Unknown";
+        }
+        downloadTrack(
+                new Artist(artist, ""),
+                new Album(album, "", "", ""),
+                new Track(0, title)
+        );
+        waitForDownloadsToFinish();
     }
 }
