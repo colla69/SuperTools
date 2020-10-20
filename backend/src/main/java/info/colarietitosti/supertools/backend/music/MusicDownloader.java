@@ -1,7 +1,7 @@
 package info.colarietitosti.supertools.backend.music;
 
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
-import info.colarietitosti.supertools.backend.config.TrackTime;
+import info.colarietitosti.supertools.backend.config.profiling.TrackTime;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.music.Entity.Album;
 import info.colarietitosti.supertools.backend.music.Entity.Artist;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import static java.lang.Thread.sleep;
 
+@TrackTime
 @Slf4j
 @Component
 public class MusicDownloader {
@@ -22,6 +23,7 @@ public class MusicDownloader {
     public static final String MP3_EXTENTION = ".mp3";
     public static final String SEPARATOR = "_";
     public static final String PATH_SEPARATOR = "/";
+
     @Autowired
     DownloadQueue downloadQueue;
 
@@ -62,7 +64,7 @@ public class MusicDownloader {
         log.info("tag process terminated");
     }
 
-    public void downloadArtistDiscography(String artistName, String linkPart) {
+    private void downloadArtistDiscography(String artistName, String linkPart) {
         log.info("searching artist {}", artistName);
         Artist artist = musicSearchService.searchArtist(artistName, linkPart);
         log.info("done!\n");
@@ -73,7 +75,7 @@ public class MusicDownloader {
         }
     }
 
-    public void downloadAlbumFromLink(String artistName, String albumName, String linkPart) {
+    private void downloadAlbumFromLink(String artistName, String albumName, String linkPart) {
         log.info("searching album {}", albumName);
         Album album = new Album(albumName, linkPart, "", "");
         musicSearchService.searchAlbum(album, linkPart);
@@ -128,7 +130,7 @@ public class MusicDownloader {
         }
     }
 
-    public void downloadSingleTrack(String artist, String album, String title) {
+    private void downloadSingleTrack(String artist, String album, String title) {
         if (album.isEmpty()){
             album = "Unknown";
         }

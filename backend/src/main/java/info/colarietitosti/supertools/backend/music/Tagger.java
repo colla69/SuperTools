@@ -48,7 +48,7 @@ public class Tagger {
             try {
                 year = splittedAlbumInfo[1];
             } catch (Exception e) {
-                log.error("year not found");
+                //log.error("year not found");
             }
             // String genre = albInfo[2];
             String fileName = splittedInfo.get(2);

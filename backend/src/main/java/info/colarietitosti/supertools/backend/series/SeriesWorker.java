@@ -1,5 +1,6 @@
 package info.colarietitosti.supertools.backend.series;
 
+import info.colarietitosti.supertools.backend.config.profiling.TrackTime;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@TrackTime
 @Slf4j
 @Getter
 @Component
