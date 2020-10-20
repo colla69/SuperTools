@@ -17,18 +17,22 @@ public class Tagger {
 
     public void tagTracksRecursiveByPath(String rootPath) {
         File root = new File(rootPath);
-        try {
-            Stream<Path> paths = Files.walk(Paths.get(rootPath));
-            paths.filter(Files::isRegularFile)
-                    .filter(f -> f.toString().endsWith(".mp3"))
-                    .forEach(this::tagByPath);
+        if (root.exists()){
+            try {
+                Stream<Path> paths = Files.walk(Paths.get(rootPath));
+                paths.filter(Files::isRegularFile)
+                        .filter(f -> f.toString().endsWith(".mp3"))
+                        .forEach(this::tagByPath);
 
-            restoreNameAfterTagging(rootPath);
-        } catch (IOException e) {
-            e.printStackTrace();
+                restoreNameAfterTagging(rootPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            List<File> files = Arrays.asList(root.listFiles());
+            System.out.println(files);
+        } else {
+            log.error("can't tag empty path!! ");
         }
-        List<File> files = Arrays.asList(root.listFiles());
-        System.out.println(files);
     }
 
     private void tagByPath(Path path) {
@@ -48,8 +52,15 @@ public class Tagger {
             }
             // String genre = albInfo[2];
             String fileName = splittedInfo.get(2);
-            String title = fileName.substring(2, fileName.length() - 4);
-            String no = fileName.substring(0, 2);
+
+            String title = "";
+            String no = "";
+            if (fileName.contains("_")){
+                no = fileName.substring(0, 2);
+                title = fileName.substring(2, fileName.length() - 4);
+            } else {
+                title = fileName.substring(0, fileName.length() - 4);
+            }
 
             saveNewFileWithTags(path, artist, album, year, title, no);
         }

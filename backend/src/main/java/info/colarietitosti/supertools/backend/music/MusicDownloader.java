@@ -1,6 +1,7 @@
 package info.colarietitosti.supertools.backend.music;
 
 import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.TrackTime;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.music.Entity.Album;
 import info.colarietitosti.supertools.backend.music.Entity.Artist;
@@ -18,6 +19,9 @@ import static java.lang.Thread.sleep;
 @Component
 public class MusicDownloader {
 
+    public static final String MP3_EXTENTION = ".mp3";
+    public static final String SEPARATOR = "_";
+    public static final String PATH_SEPARATOR = "/";
     @Autowired
     DownloadQueue downloadQueue;
 
@@ -99,15 +103,19 @@ public class MusicDownloader {
             return;
         }
         String downPath = getDownloadPath(artist, album);
+        downloadQueue.put(new FileDownloader(link, downPath, getMp3Name(track), ""));
+    }
 
-        downloadQueue.put(new FileDownloader(link, downPath, track.getNo() + " " + track.getName().concat(".mp3"), ""));
+    private String getMp3Name(Track track) {
+        if (track.getNo() != null){
+            return track.getNo() + " " + track.getName().concat(MP3_EXTENTION);
+        }
+        return  track.getName().concat(MP3_EXTENTION);
     }
 
     private String getDownloadPath(Artist artist, Album album) {
-        String separator = "_";
-        String pathSeparator = "/";
-        return config.getMusicOutPath().concat("downloads/").concat(artist.getName()).concat(pathSeparator).concat(album.getName())
-                .concat(separator).concat(album.getYear()).concat(pathSeparator);
+        return config.getMusicOutPath().concat("downloads/") +
+                artist.getName() + PATH_SEPARATOR + album.getName() + SEPARATOR + album.getYear() + PATH_SEPARATOR;
     }
 
     private void waitForDownloadsToFinish() {
@@ -127,7 +135,7 @@ public class MusicDownloader {
         downloadTrack(
                 new Artist(artist, ""),
                 new Album(album, "", "", ""),
-                new Track(0, title)
+                new Track(null, title)
         );
         waitForDownloadsToFinish();
     }
