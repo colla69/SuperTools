@@ -15,6 +15,10 @@ import java.util.stream.Stream;
 @Slf4j
 public class Tagger {
 
+    public static final String SEPARATOR_SONG = "-";
+    public static final String SEPARATOR_ALBUM = "_";
+    public static final String SEPARATOR_PATH = "/";
+
     public void tagTracksRecursiveByPath(String rootPath) {
         File root = new File(rootPath);
         if (root.exists()){
@@ -42,7 +46,7 @@ public class Tagger {
 
             String artist = splittedInfo.get(0);
             String albumInfo = splittedInfo.get(1);
-            String[] splittedAlbumInfo = albumInfo.split("_");
+            String[] splittedAlbumInfo = albumInfo.split(SEPARATOR_ALBUM);
             String album = splittedAlbumInfo[0];
             String year = "";
             try {
@@ -55,9 +59,11 @@ public class Tagger {
 
             String title = "";
             String no = "";
-            if (fileName.contains("_")){
-                no = fileName.substring(0, 2);
-                title = fileName.substring(2, fileName.length() - 4);
+            if (fileName.contains(SEPARATOR_SONG)){
+                String [] splitNameNo = fileName.split(SEPARATOR_SONG);
+                no = splitNameNo[0].trim();
+                String rawTitle = splitNameNo[1].trim();
+                title =  rawTitle.substring(0, rawTitle.length() - 4);
             } else {
                 title = fileName.substring(0, fileName.length() - 4);
             }
@@ -68,7 +74,7 @@ public class Tagger {
 
     private List<String> splittedInfosFromPath(Path path) {
         final int len = path.getNameCount();
-        return Arrays.asList(path.subpath(len - 3, path.getNameCount()).toString().split("/"));
+        return Arrays.asList(path.subpath(len - 3, path.getNameCount()).toString().split(   SEPARATOR_PATH));
     }
 
     private void saveNewFileWithTags(Path path, String artist, String album, String year, String title, String no){

@@ -23,6 +23,8 @@ public class MusicDownloader {
     public static final String MP3_EXTENTION = ".mp3";
     public static final String SEPARATOR = "_";
     public static final String PATH_SEPARATOR = "/";
+    public static final String UNKNOWN = "Unknown";
+    public static final String DOWNLOADS_PATH = "downloads" + PATH_SEPARATOR;
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -49,7 +51,7 @@ public class MusicDownloader {
         tag(artist);
     }
 
-    public void downloadSingleTrackAndTag(String artist, String album, String title){
+    public void downloadSingleTrackAndTag(String artist, String album, String title) {
         log.info("starting music download");
         downloadSingleTrack(artist, album, title);
         log.info("music download terminated");
@@ -60,7 +62,8 @@ public class MusicDownloader {
     public void tag(String artist) {
         log.info("starting tag process");
         Tagger tagger = new Tagger();
-        tagger.tagTracksRecursiveByPath(config.getMusicOutPath().concat("downloads/").concat(artist).concat("/"));
+        tagger.tagTracksRecursiveByPath(config.getMusicOutPath()
+                .concat(DOWNLOADS_PATH).concat(artist).concat(PATH_SEPARATOR));
         log.info("tag process terminated");
     }
 
@@ -109,14 +112,14 @@ public class MusicDownloader {
     }
 
     private String getMp3Name(Track track) {
-        if (track.getNo() != null){
-            return track.getNo() + " " + track.getName().concat(MP3_EXTENTION);
+        if (track.getNo() != null) {
+            return track.getNo() + " - " + track.getName().concat(MP3_EXTENTION);
         }
-        return  track.getName().concat(MP3_EXTENTION);
+        return track.getName().concat(MP3_EXTENTION);
     }
 
     private String getDownloadPath(Artist artist, Album album) {
-        return config.getMusicOutPath().concat("downloads/") +
+        return config.getMusicOutPath().concat(DOWNLOADS_PATH) +
                 artist.getName() + PATH_SEPARATOR + album.getName() + SEPARATOR + album.getYear() + PATH_SEPARATOR;
     }
 
@@ -131,8 +134,8 @@ public class MusicDownloader {
     }
 
     private void downloadSingleTrack(String artist, String album, String title) {
-        if (album.isEmpty()){
-            album = "Unknown";
+        if (album == null) {
+            album = UNKNOWN;
         }
         downloadTrack(
                 new Artist(artist, ""),

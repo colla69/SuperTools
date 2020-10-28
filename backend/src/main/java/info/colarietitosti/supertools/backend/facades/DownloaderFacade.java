@@ -30,6 +30,7 @@ public class DownloaderFacade {
     public static final String ARTIST = "artist";
     public static final String LINKPART = "linkpart";
     public static final String TITLE = "title";
+    public static final String RSYNC = "rsync";
 
     @Autowired
     DownloadQueue downloadQueue;
@@ -50,7 +51,7 @@ public class DownloaderFacade {
         result.setDone(downloadQueue.getDoneQueue().stream().map(FileDownloader::getTitle).collect(Collectors.toList()));
         result.setDownloading(downloadQueue.getDownloadingQueue().stream().map(FileDownloader::getTitle).collect(Collectors.toList()));
         result.setTodo(downloadQueue.getToDoQueue().stream().map(FileDownloader::getTitle).collect(Collectors.toList()));
-        result.setSyncRunning(ShellExecuter.isRunning("rsync"));
+        result.setSyncRunning(ShellExecuter.isRunning(RSYNC));
         result.setQueueRunning(downloadQueue.getRunning());
         result.setSearchRunning(seriesWorker.isRunning());
         return result;
@@ -135,7 +136,6 @@ public class DownloaderFacade {
         String musicOutPath = config.getMusicOutPath().concat("downloads/");
         try {
             Files.list(new File(musicOutPath).toPath())
-                    //.limit(10)
                     .forEach(path -> {
                         artists.add(path.getFileName().toString());
                     });
