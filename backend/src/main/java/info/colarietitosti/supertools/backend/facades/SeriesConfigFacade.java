@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.Config;
 
-import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.BackendConfiguration;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfig;
 import info.colarietitosti.supertools.backend.config.series.SeriesConfigRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class SeriesConfigFacade {
 
     @Autowired
-    BackendConfigutation config;
+    BackendConfiguration config;
 
     @Autowired
     SeriesConfigRepository seriesConfigRepository;

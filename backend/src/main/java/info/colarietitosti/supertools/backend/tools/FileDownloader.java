@@ -29,13 +29,16 @@ public class FileDownloader implements Runnable {
 
     public void download(String link, String savePath, String title){
         new File(savePath).mkdirs();
-        String newFilePath = makeSavePath();
+
+        String newFilePath = makeFilePath();
 
         try (BufferedInputStream in = new BufferedInputStream(new URL(link).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(newFilePath))
         {
             executeDownload(newFilePath, in, fileOutputStream);
-            executeDoneCmd();
+            if (new File(newFilePath).exists()){
+                executeDoneCmd();
+            }
         } catch (IOException e) {
             log.error("\n!!!!downloaderror", e);
         }
@@ -51,7 +54,7 @@ public class FileDownloader implements Runnable {
         }
     }
 
-    private String makeSavePath() {
+    private String makeFilePath() {
         return this.savePath.concat(this.title.replace("/",""));
     }
 

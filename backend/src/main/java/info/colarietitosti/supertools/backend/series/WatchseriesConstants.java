@@ -17,7 +17,7 @@ public class WatchseriesConstants {
             VIDOZA,
             VIDTODO,
             VIDUP,
-            //VSHARE,
+            VSHARE,
             VIDLOX,
             VIDEOBIN
     ));

@@ -2,6 +2,7 @@ package info.colarietitosti.supertools.backend.series;
 
 import info.colarietitosti.supertools.backend.config.profiling.Profiled;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
+import info.colarietitosti.supertools.backend.series.Entity.Episode;
 import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class SeriesWorker {
     public void updateSeries() {
         startRunning();
         series = watchseriesSearch.searchSeriesForDownload();
+        log.info(String.valueOf(series.size()));
         if (seriesWereFound()) {
             downloadFoundSeries();
         }
@@ -47,11 +49,11 @@ public class SeriesWorker {
 
     private void downloadFoundSeries() {
         this.series.forEach(serie -> {
-            serie.getEpis().forEach(episode -> {
+            for (Episode episode : serie.getEpis()) {
                 log.info("Starting Episode Search for: ".concat(episode.getNameWithFileExt()));
                 watchseriesSearch.downloadFirstAvailableFromEpiPage(episode);
                 log.info("Search completed!");
-            });
+            }
         });
     }
 

@@ -18,7 +18,7 @@ import java.util.List;
 @Getter
 @Component
 @Scope("singleton")
-public class BackendConfigutation {
+public class BackendConfiguration {
 
     @Autowired
     SeriesConfigRepository seriesConfigRepository;

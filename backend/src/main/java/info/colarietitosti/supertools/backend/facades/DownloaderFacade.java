@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.downloaderQueue;
 
-import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.BackendConfiguration;
 import info.colarietitosti.supertools.backend.music.MusicDownloader;
 import info.colarietitosti.supertools.backend.series.SeriesWorker;
 import info.colarietitosti.supertools.backend.tools.FileDownloader;
@@ -39,7 +39,7 @@ public class DownloaderFacade {
     SeriesWorker seriesWorker;
 
     @Autowired
-    BackendConfigutation config;
+    BackendConfiguration config;
 
     @Autowired
     MusicDownloader musicDownloader;

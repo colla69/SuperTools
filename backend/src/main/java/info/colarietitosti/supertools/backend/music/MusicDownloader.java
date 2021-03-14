@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.music;
 
-import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.BackendConfiguration;
 import info.colarietitosti.supertools.backend.config.profiling.Profiled;
 import info.colarietitosti.supertools.backend.downloaderQueue.DownloadQueue;
 import info.colarietitosti.supertools.backend.music.Entity.Album;
@@ -30,7 +30,7 @@ public class MusicDownloader {
     DownloadQueue downloadQueue;
 
     @Autowired
-    BackendConfigutation config;
+    BackendConfiguration config;
 
     @Autowired
     MusicSearchService musicSearchService;

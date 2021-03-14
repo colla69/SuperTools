@@ -1,6 +1,6 @@
 package info.colarietitosti.supertools.backend.series;
 
-import info.colarietitosti.supertools.backend.config.BackendConfigutation;
+import info.colarietitosti.supertools.backend.config.BackendConfiguration;
 import info.colarietitosti.supertools.backend.series.Entity.Episode;
 import info.colarietitosti.supertools.backend.series.Entity.Serie;
 import info.colarietitosti.supertools.backend.tools.FirefoxDriverUtils;
@@ -21,17 +21,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static info.colarietitosti.supertools.backend.series.WatchseriesConstants.isAllowedStream;
 
 @Slf4j
 @Component
 public class WatchseriesSearch {
 
+    public static final String WATCHLINK = "watchlink";
+    public static final String HREF = "href";
+    public static final String PUSH_BUTTON = "push_button";
+    public static final String TR = "tr";
+    public static final String LI = "li";
+    public static final String A = "a";
+    public static final String META = "meta";
+    public static final String CONTENT = "content";
+    public static final String PATH_SEPARATOR = "/";
+    public static final String DONE_PATH = "done" + PATH_SEPARATOR;
+
     @Autowired
-    BackendConfigutation config;
+    BackendConfiguration config;
 
     @Autowired
     StreamServiceDownloaderBackend streamServiceDownloaderBackend;
@@ -42,8 +54,8 @@ public class WatchseriesSearch {
     private List<Serie> todo = null;
 
     private static Episode extractEpisodeFromEpisodeLine(Element episodeLine, Serie serie){
-        String epilink = episodeLine.select("a").get(0).attr("href");
-        String epiNo = episodeLine.select("meta").get(0).attr("content");
+        String epilink = episodeLine.select(A).get(0).attr(HREF);
+        String epiNo = episodeLine.select(META).get(0).attr(CONTENT);
         return new Episode(serie, Integer.parseInt(epiNo), epilink);
     }
 
@@ -55,19 +67,17 @@ public class WatchseriesSearch {
             .forEach(serie -> {
                 makeSeriesSavePath(serie);
                 serie.clearEpisodes();
-                List<Episode> epis = searchEpisodes(serie.getLink(), serie.getNo(), serie);
-                epis.forEach(episode -> {
-                    String fileName = episode.getSavePath(doneFilesPath);
-                    if (episodeAlreadyDownloaded(doneList, fileName)) {
+                List<Episode> episodes = searchEpisodes(serie.getLink(), serie.getNo(), serie);
+                episodes.forEach(episode -> {
+                    if (episodeNotAlreadyDownloaded(doneList, episode.getSavePath(doneFilesPath))) {
                         serie.addEpisode(episode);
                     }
-
                 });
         });
         return todo;
     }
 
-    private boolean episodeAlreadyDownloaded(List<String> doneList, String fileName) {
+    private boolean episodeNotAlreadyDownloaded(List<String> doneList, String fileName) {
         return doneList.parallelStream().noneMatch(d -> d.contains(fileName));
     }
 
@@ -95,7 +105,7 @@ public class WatchseriesSearch {
 
     private void initPaths() {
         savePath = config.getSeriesOutPath();
-        doneFilesPath = savePath.concat("done/");
+        doneFilesPath = savePath.concat(DONE_PATH);
         new File(doneFilesPath).mkdirs();
     }
 
@@ -104,7 +114,7 @@ public class WatchseriesSearch {
     }
 
     private void makeSeriesSavePath(Serie s) {
-        String serieOutPath = savePath.concat(s.getName()).concat("/");
+        String serieOutPath = savePath.concat(s.getName()).concat(PATH_SEPARATOR);
         new File(serieOutPath).mkdirs();
     }
 
@@ -123,7 +133,7 @@ public class WatchseriesSearch {
                     Integer blockSerieNumber = Integer.parseInt(serieBlock.text().substring(7,9).trim());
                     return serie.isSerieNumber(blockSerieNumber);
                 })
-                .map(serieBlock -> serieBlock.select("li"))
+                .map(serieBlock -> serieBlock.select(LI))
                 .collect(Collectors.toList());
 
         Elements serieTablePart = new Elements();
@@ -142,7 +152,6 @@ public class WatchseriesSearch {
             doc = Jsoup.connect(link).get();
         } catch (IOException e) {
             return null;
-            //e.printStackTrace();
         }
         return doc.getElementsByAttributeValue("itemprop","season");
     }
@@ -154,27 +163,46 @@ public class WatchseriesSearch {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-        List<String> epiLinks = Collections.synchronizedList(new ArrayList<String>());
-        Elements liness = doc.select("tr");
-        boolean success = false;
-        List<String> list = getPrePageLinks(liness);
+        List<String> epiLinks = new ArrayList<String>();
+        Elements lines = doc.select(TR);
+
+        List<String> prePageLinks = getPrePageLinks(lines);
         FirefoxDriver driver = null;
         try {
             driver = FirefoxDriverUtils.getFirefoxDriverHeadless();
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+
+        boolean success = tryDownloadingFromPrePageLinks(episode, epiLinks, prePageLinks, driver);
+        FirefoxDriverUtils.killDriver(driver);
+        FirefoxDriverUtils.cleanup();
+        if (!success) log.info("search failed :( ");
+    }
+
+    private List<String> getPrePageLinks(Elements lines) {
+        return lines.stream()
+                .filter(line -> isAllowedStream(line.text()))
+                .map( l -> {
+                    Elements el = l.getElementsByClass(WATCHLINK);
+                    return el.get(0).attr(HREF);
+                })
+                .collect(Collectors.toList());
+    }
+
+    private boolean tryDownloadingFromPrePageLinks(Episode episode, List<String> epiLinks, List<String> list, FirefoxDriver driver) {
         for (String line : list){
             try {
                 driver.get(line);
-                if (FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 3, By.className("push_button"))) continue;
+                if (FirefoxDriverUtils.tryWaitingForPageToLoad(driver, 3, By.className(PUSH_BUTTON))) {
+                    continue;
+                }
 
                 String epiLink = extractElementFromPage(driver);
 
                 log.info("trying download from : {}", epiLink);
                 if (streamServiceDownloaderBackend.downloadLink(epiLink, episode)){
-                    success = true;
-                    break;
+                    return true;
                 }
                 epiLinks.add(epiLink);
                 logProgress(epiLinks);
@@ -182,36 +210,19 @@ public class WatchseriesSearch {
                 log.error("error downloading {}", e.getMessage());
                 continue;
             }
-//            try {
-//                sleep(2000);
-//            } catch (InterruptedException ex) {
-//                ex.printStackTrace();
-//            }
         }
-        FirefoxDriverUtils.killDriver(driver);
-        FirefoxDriverUtils.cleanup();
-        if (!success) log.info("search failed :( ");
+        return false;
     }
 
     private String extractElementFromPage(FirefoxDriver driver) {
-        WebElement el = driver.findElement(By.className("push_button"));
-        return el.getAttribute("href");
+        WebElement el = driver.findElement(By.className(PUSH_BUTTON));
+        return el.getAttribute(HREF);
     }
 
     private void logProgress(List<String> epiLinks) {
         if (!epiLinks.isEmpty() && epiLinks.size() % 5 == 0) {
             log.info(String.format("tryed %d links..", epiLinks.size()));
         }
-    }
-
-    private List<String> getPrePageLinks(Elements liness) {
-        return liness.stream()
-                .filter(line -> WatchseriesConstants.isAllowedStream(line.text()))
-                .map( l -> {
-                    Elements el = l.getElementsByClass("watchlink");
-                    return el.get(0).attr("href");
-                })
-                .collect(Collectors.toList());
     }
 
 }

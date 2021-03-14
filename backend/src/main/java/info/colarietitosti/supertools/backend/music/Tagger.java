@@ -60,7 +60,7 @@ public class Tagger {
             String title = "";
             String no = "";
             if (fileName.contains(SEPARATOR_SONG)){
-                String [] splitNameNo = fileName.split(SEPARATOR_SONG);
+                String [] splitNameNo = fileName.split(SEPARATOR_SONG, 2);
                 no = splitNameNo[0].trim();
                 String rawTitle = splitNameNo[1].trim();
                 title =  rawTitle.substring(0, rawTitle.length() - 4);
@@ -69,6 +69,7 @@ public class Tagger {
             }
 
             saveNewFileWithTags(path, artist, album, year, title, no);
+            log.info("new tag saved: {}, {}, {}",artist, album, title);
         }
     }
 

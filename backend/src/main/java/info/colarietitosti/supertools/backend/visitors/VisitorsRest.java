@@ -20,11 +20,11 @@ import java.util.stream.Collectors;
 public class VisitorsRest {
 
     public static final String MY_IPS_API = "https://admin.colarietitosti.info/ips/IpLog";
-    public static final String VISITORS_API = "https://cv.colarietitosti.info/visitors";
+    public static final String VISITORS_API = "https://cv.colarietitosti.info/backend/visitors";
 
     @GetMapping("/visitors")
     @ResponseBody
-    public List<VisitorIps> getAllApps() {
+    public List<VisitorIps> getVisitors() {
         try {
             Set<VisitorIps> visitorIps = getVisitorIps();
             Set<MyIps> myIps = getMyIps();
@@ -39,9 +39,9 @@ public class VisitorsRest {
 
     private List<VisitorIps> filterOutKnownIps(Set<VisitorIps> visitorIps, List<String> myKnownIps) {
         return visitorIps.parallelStream()
-                .filter(v -> !v.getIp_addr().startsWith("66.249"))
-                .filter(v -> !v.getIp_addr().isEmpty())
-                .filter(v -> !myKnownIps.contains(v.getIp_addr()))
+                .filter(visitor -> !visitor.getIp_addr().startsWith("66.249"))
+                .filter(visitor -> !visitor.getIp_addr().isEmpty())
+                .filter(visitor -> !myKnownIps.contains(visitor.getIp_addr()))
                 .sorted((o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()))
                 .collect(Collectors.toList());
     }
